@@ -1,9 +1,16 @@
+using Kaidao.Services.Api.ProgramExtensions;
+using Serilog;
+
+// SYSTEM: Create WebApplicationBuilder.
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+//
+// ----- Use Serilog -----
+builder.UseSerilog();
+Log.Information("Configurating WebApplicationBuilder...");
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -16,7 +23,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
