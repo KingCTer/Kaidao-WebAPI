@@ -9,18 +9,29 @@ var builder = WebApplication.CreateBuilder(args);
 // ----- Use Serilog -----
 builder.UseSerilog();
 Log.Information("Configurating WebApplicationBuilder...");
+//
+// ----- Controllers -----
+builder.Services.AddControllersWithViews();
+//
+// ----- Database -----
+builder.AddDatabaseConfiguration();
+//
+// ----- Swagger UI -----
+builder.AddSwaggerConfiguration();
 
-builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
+
+// SYSTEM: Build WebApplication.
+Log.Information("Building WebApplication...");
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    // ----- Use Swagger -----
+    app.UseSwaggerConfiguration();
 }
 
 //app.UseHttpsRedirection();
@@ -29,4 +40,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+Log.Information("Starting host...");
 app.Run();
