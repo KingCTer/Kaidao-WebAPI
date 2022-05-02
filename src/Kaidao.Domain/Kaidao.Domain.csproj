@@ -3,12 +3,20 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>warnings</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Kaidao.Domain.Core\Kaidao.Domain.Core.csproj" />
     <ProjectReference Include="..\Kaidao.Infra.CrossCutting.Bus\Kaidao.Infra.CrossCutting.Bus.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AppEntity\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
   </ItemGroup>
 
 </Project>
