@@ -8,6 +8,15 @@ namespace Kaidao.Services.Api.ProgramExtensions;
 
 public static class SerilogExtension
 {
+    internal static void BootstrapLogger(string msg)
+    {
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .CreateBootstrapLogger();
+
+        Log.Information(msg);
+    }
+
     internal static WebApplicationBuilder UseSerilog(this WebApplicationBuilder builder)
     {
         if (builder == null) throw new ArgumentNullException(nameof(builder));

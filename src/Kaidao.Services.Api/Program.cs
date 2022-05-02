@@ -1,44 +1,90 @@
 using Kaidao.Services.Api.ProgramExtensions;
 using Serilog;
 
-// SYSTEM: Create WebApplicationBuilder.
-var builder = WebApplication.CreateBuilder(args);
+SerilogExtension.BootstrapLogger("Starting up");
 
-// Add services to the container.
-//
-// ----- Use Serilog -----
-builder.UseSerilog();
-Log.Information("Configurating WebApplicationBuilder...");
-//
-// ----- Controllers -----
-builder.Services.AddControllersWithViews();
-//
-// ----- Database -----
-builder.AddDatabaseConfiguration();
-//
-// ----- Swagger UI -----
-builder.AddSwaggerConfiguration();
-
-
-builder.Services.AddEndpointsApiExplorer();
-
-
-// SYSTEM: Build WebApplication.
-Log.Information("Building WebApplication...");
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    // ----- Use Swagger -----
-    app.UseSwaggerConfiguration();
+    // SYSTEM: Create WebApplicationBuilder.
+    var builder = WebApplication.CreateBuilder(args);
+
+    // ----- Use Serilog -----
+    builder.UseSerilog();
+
+    // Configure Services.
+    //
+    // ----- Controllers And Views -----
+    builder.Services.AddControllersWithViews();
+    builder.Services.AddRazorPages();
+    //
+    // ----- Database -----
+    builder.AddDatabaseConfiguration();
+    //
+    // ----- Identity -----
+    builder.AddIdentityConfiguration();
+    //
+    // ----- Auth -----
+    builder.AddAuthConfiguration();
+    //
+    // ----- Cors -----
+    builder.Services.AddCors();
+    //
+    // ----- Swagger UI -----
+    builder.AddSwaggerConfiguration();
+
+
+    builder.Services.AddEndpointsApiExplorer();
+
+
+    // SYSTEM: Build WebApplication.
+    Log.Information("Building WebApplication...");
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
+
+        // ----- Use Swagger -----
+        app.UseSwaggerConfiguration();
+    }
+
+    //app.UseHttpsRedirection();
+
+    app.UseStaticFiles();
+
+    app.UseRouting();
+
+    app.UseIdentityServer();
+
+    app.UseAuthorization();
+
+    app.UseCors(policy => policy
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
+
+    app.MapRazorPages()
+        .RequireAuthorization();
+
+    app.MapControllers();
+
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+    Log.Information("Starting host...");
+    app.Run();
+}
+catch (Exception ex) when (ex.GetType().Name is not "StopTheHostException")
+{
+
+    Log.Fatal(ex, "Unhandled exception");
+}
+finally
+{
+    Log.Information("Shut down complete");
+    Log.CloseAndFlush();
 }
 
-//app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-Log.Information("Starting host...");
-app.Run();
