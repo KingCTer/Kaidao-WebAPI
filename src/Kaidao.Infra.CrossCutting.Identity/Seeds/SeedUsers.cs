@@ -49,6 +49,35 @@ public class SeedUsers
             {
                 Log.Debug("admin already exists");
             }
+
+            var user2 = userMgr.FindByNameAsync("user").Result;
+            if (user2 == null)
+            {
+                user2 = new AppUser
+                {
+                    Id = "user",
+                    UserName = "user",
+                    Email = "user@gmail.com",
+                    EmailConfirmed = true,
+                    LockoutEnabled = false
+                };
+                var result = userMgr.CreateAsync(user2, "Admin@123$").Result;
+                if (result.Succeeded)
+                {
+                    var user = userMgr.FindByNameAsync("user").Result;
+                    result = userMgr.AddToRoleAsync(user, IdentityConstant.Roles.User).Result;
+                }
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description);
+                }
+
+                Log.Debug("user created");
+            }
+            else
+            {
+                Log.Debug("user already exists");
+            }
         }
     }
 }

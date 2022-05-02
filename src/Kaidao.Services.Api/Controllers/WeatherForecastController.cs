@@ -1,4 +1,8 @@
+using Kaidao.Domain.Constants;
+using Kaidao.Services.Api.IdentityServer.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Duende.IdentityServer.IdentityServerConstants;
 
 namespace Kaidao.Services.Api.Controllers
 {
@@ -18,7 +22,9 @@ namespace Kaidao.Services.Api.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpGet(Name = "GetWeatherForecast")]
+        [ClaimRequirement(FunctionCode.SYSTEM, CommandCode.CREATE)]
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast

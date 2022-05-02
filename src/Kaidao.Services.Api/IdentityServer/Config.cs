@@ -1,5 +1,6 @@
 ﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
+using Kaidao.Domain.Constants;
 
 namespace Kaidao.Services.Api.IdentityServer;
 
@@ -18,6 +19,7 @@ public static class Config
         new ApiScope[]
         {
             new ApiScope(IdentityServerConstants.LocalApi.ScopeName, "Public Api Scope"),
+            new ApiScope(MyIdentityServerConstants.PrivateApi.ScopeName, "Private Api Resource"),
         };
 
     public static IEnumerable<Client> Clients =>
@@ -45,6 +47,7 @@ public static class Config
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.LocalApi.ScopeName,
+                    MyIdentityServerConstants.PrivateApi.ScopeName,
                 }
             },
         };

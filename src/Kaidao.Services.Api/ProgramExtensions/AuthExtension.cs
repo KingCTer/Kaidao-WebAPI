@@ -18,8 +18,8 @@ public static class AuthExtension
                 // register your IdentityServer with Google at https://console.developers.google.com
                 // enable the Google+ API
                 // set the redirect URI to https://localhost:5000/signin-google
-                options.ClientId = "378129271380-kgm3r5ifbaeio4ch1teep4kk5kfmi1pq.apps.googleusercontent.com";
-                options.ClientSecret = "dbkwyozeyn4wf1hm3IBuyDJg";
+                options.ClientId = "1014368622629-8jo2dqjroonrj7p44sr37v092dvbr3am.apps.googleusercontent.com";
+                options.ClientSecret = "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";
             })
             .AddLocalApi("PrivateAccessToken", option =>
             {
