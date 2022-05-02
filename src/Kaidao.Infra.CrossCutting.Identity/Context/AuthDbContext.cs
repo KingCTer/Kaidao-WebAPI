@@ -7,6 +7,9 @@ namespace Kaidao.Infra.CrossCutting.Identity.Context
 {
     public class AuthDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
+        // Add-Migration -Context AuthDbContext -Name Initial -OutputDir C:\SourceCode\GraduateThesis\Kaidao-WebAPI\src\Kaidao.Infra.CrossCutting.Identity\Migrations\
+        // Update-Database -Context AuthDbContext
+
         public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
         {
         }
