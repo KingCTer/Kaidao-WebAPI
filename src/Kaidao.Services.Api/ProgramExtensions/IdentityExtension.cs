@@ -1,4 +1,5 @@
 ﻿using Kaidao.Domain.IdentityEntity;
+using Kaidao.Infra.CrossCutting.Identity;
 using Kaidao.Infra.CrossCutting.Identity.Context;
 using Kaidao.Services.Api.IdentityServer;
 using Microsoft.AspNetCore.Identity;

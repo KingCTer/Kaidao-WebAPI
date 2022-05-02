@@ -21,7 +21,7 @@ namespace Kaidao.Domain.IdentityEntity.Configurations
 
             builder.HasOne<AppUser>(up => up.User)
                 .WithMany(r => r.UserPermissions)
-                .HasForeignKey(cf => cf.FunctionId);
+                .HasForeignKey(cf => cf.UserId);
 
             builder.Property(p => p.UserId)
                 .HasMaxLength(50)

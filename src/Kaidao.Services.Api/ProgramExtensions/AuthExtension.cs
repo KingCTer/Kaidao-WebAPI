@@ -32,6 +32,7 @@ public static class AuthExtension
             {
                 policy.AddAuthenticationSchemes("PrivateAccessToken");
                 policy.RequireAuthenticatedUser();
+                //policy.RequireRole("Admin");
                 //custom requirements
             });
         });

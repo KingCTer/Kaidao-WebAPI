@@ -1,4 +1,9 @@
-﻿@{
+﻿@using Kaidao.Web.Admin.Constants
+@using Microsoft.AspNetCore.Authorization
+@using System.Text.Json
+@inject IAuthorizationService AuthorizationService
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,3 +11,22 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p>User is signed in.</p>
+}
+
+@{
+    var permissionsClaim = User.Claims
+                .SingleOrDefault(c => c.Type == IdentityConstant.Claims.Permissions);
+    if (permissionsClaim != null)
+    {
+        var permissions = JsonSerializer.Deserialize<List<string>>(permissionsClaim.Value);
+        if (permissions!.Contains("SYSTEM_CREATE"))
+        {
+            <p>SYSTEM_CREATE</p>
+        }
+    }
+            
+}

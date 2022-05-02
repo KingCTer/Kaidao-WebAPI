@@ -43,12 +43,16 @@ public class IdentityProfileService : IProfileService
         var claims = principal.Claims.ToList();
         var roles = await _userManager.GetRolesAsync(user);
 
-        var query = from p in _context.Permissions
-                    join c in _context.Commands on p.CommandId equals c.Id
-                    join f in _context.Functions on p.FunctionId equals f.Id
-                    join r in _roleManager.Roles on p.RoleId equals r.Id
-                    where roles.Contains(r.Name)
-                    select f.Id + "_" + c.Id;
+        //var query = from p in _context.Permissions
+        //            join c in _context.Commands on p.CommandId equals c.Id
+        //            join f in _context.Functions on p.FunctionId equals f.Id
+        //            join r in _roleManager.Roles on p.RoleId equals r.Id
+        //            where roles.Contains(r.Name)
+        //            select f.Id + "_" + c.Id;
+
+        var query = (from p in _context.Permissions where roles.Contains(p.RoleId) select p.FunctionId + "_" + p.CommandId)
+                    .Union(from up in _context.UserPermissions where up.Allow select up.FunctionId + "_" + up.CommandId)
+                    .Except(from up in _context.UserPermissions where !up.Allow select up.FunctionId + "_" + up.CommandId);
 
         var permissions = await query.Distinct().ToListAsync();
 
