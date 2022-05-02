@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Kaidao.Domain.Core\Kaidao.Domain.Core.csproj" />
+    <ProjectReference Include="..\Kaidao.Infra.CrossCutting.Bus\Kaidao.Infra.CrossCutting.Bus.csproj" />
+  </ItemGroup>
+
 </Project>

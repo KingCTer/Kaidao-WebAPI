@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Kaidao.Domain\Kaidao.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -10,4 +10,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Kaidao.Application\Kaidao.Application.csproj" />
+    <ProjectReference Include="..\Kaidao.Infra.CrossCutting.Bus\Kaidao.Infra.CrossCutting.Bus.csproj" />
+    <ProjectReference Include="..\Kaidao.Infra.CrossCutting.Identity\Kaidao.Infra.CrossCutting.Identity.csproj" />
+    <ProjectReference Include="..\Kaidao.Infra.CrossCutting.IoC\Kaidao.Infra.CrossCutting.IoC.csproj" />
+  </ItemGroup>
+
 </Project>
