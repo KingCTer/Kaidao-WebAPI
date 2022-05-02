@@ -1,5 +1,7 @@
 ﻿using Kaidao.Infra.CrossCutting.Identity.Context;
+using Kaidao.Infra.CrossCutting.Identity.Seeds;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Kaidao.Services.Api.ProgramExtensions;
 
@@ -19,7 +21,16 @@ public static class DatabaseExtension
                 options.EnableSensitiveDataLogging();
             }
         });
-
+        
         return builder;
+    }
+
+    internal static WebApplication SeedDatabase(this WebApplication app)
+    {
+        if (app == null) throw new ArgumentNullException(nameof(app));
+
+        SeedUsers.EnsureSeedUsers(app);
+
+        return app;
     }
 }

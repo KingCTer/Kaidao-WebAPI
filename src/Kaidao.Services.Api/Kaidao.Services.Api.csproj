@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>warnings</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -23,5 +23,10 @@
     <ProjectReference Include="..\Kaidao.Infra.CrossCutting.Identity\Kaidao.Infra.CrossCutting.Identity.csproj" />
     <ProjectReference Include="..\Kaidao.Infra.CrossCutting.IoC\Kaidao.Infra.CrossCutting.IoC.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 
 </Project>

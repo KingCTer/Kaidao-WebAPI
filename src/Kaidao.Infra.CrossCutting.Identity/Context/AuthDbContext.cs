@@ -1,5 +1,6 @@
 ﻿using Kaidao.Domain.IdentityEntity;
 using Kaidao.Domain.IdentityEntity.Configurations;
+using Kaidao.Infra.CrossCutting.Identity.Seeds;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,9 @@ namespace Kaidao.Infra.CrossCutting.Identity.Context
 
             // Configuration
             builder.ApplyConfigurationsFromAssembly(typeof(AppUserConfig).Assembly);
+
+            // Seed Databae
+            builder.SeedData();
         }
     }
 }
