@@ -21,6 +21,8 @@ public class ClaimRequirementFilter : IAuthorizationFilter
     private readonly IPermissionRepository _permissionRepository;
     private readonly IUserPermissionRepository _userPermissionRepository;
 
+    private readonly SignInManager<AppUser> _signInManager;
+
     public ClaimRequirementFilter(
         FunctionCode functionCode, 
         CommandCode commandCode,
@@ -28,7 +30,8 @@ public class ClaimRequirementFilter : IAuthorizationFilter
         AuthDbContext context,
         RoleManager<AppRole> roleManager,
         IPermissionRepository permissionRepository,
-        IUserPermissionRepository userPermissionRepository
+        IUserPermissionRepository userPermissionRepository,
+        SignInManager<AppUser> signInManager
         )
     {
         _functionCode = functionCode;
@@ -38,9 +41,10 @@ public class ClaimRequirementFilter : IAuthorizationFilter
         _roleManager = roleManager;
         _permissionRepository = permissionRepository;
         _userPermissionRepository = userPermissionRepository;
-}
+        _signInManager = signInManager;
+    }
 
-    public void OnAuthorization(AuthorizationFilterContext context)
+    public async void OnAuthorization(AuthorizationFilterContext context)
     {
         var user = _userManager.GetUserAsync(context.HttpContext.User).Result;
         if (user != null)
@@ -49,8 +53,8 @@ public class ClaimRequirementFilter : IAuthorizationFilter
 
             var realtimePermissionsQuery = 
                 (from p in _permissionRepository.GetByRoleId(roles) select p.FunctionId + "_" + p.CommandId)
-                .Union(from up in _userPermissionRepository.GetByAllow(true) select up.FunctionId + "_" + up.CommandId)
-                .Except(from up in _userPermissionRepository.GetByAllow(false) select up.FunctionId + "_" + up.CommandId);
+                .Union(from up in _userPermissionRepository.GetByAllow(user.Id, true) select up.FunctionId + "_" + up.CommandId)
+                .Except(from up in _userPermissionRepository.GetByAllow(user.Id,false) select up.FunctionId + "_" + up.CommandId);
 
 
             var realtimePermissionsList = realtimePermissionsQuery.Distinct().ToList();
@@ -63,7 +67,9 @@ public class ClaimRequirementFilter : IAuthorizationFilter
 
                 if (!Enumerable.SequenceEqual(realtimePermissionsList, claimPermissionsList))
                 {
-                    context.Result = new ForbidResult();
+                    context.Result = new StatusCodeResult(203);
+                    // delete local authentication cookie
+                    var task = _userManager.UpdateSecurityStampAsync(user).Result;
                 }
 
                 if (!claimPermissionsList!.Contains(_functionCode + "_" + _commandCode))

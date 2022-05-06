@@ -12,9 +12,9 @@ namespace Kaidao.Infra.CrossCutting.Identity.Repository
         {
         }
 
-        public IQueryable<UserPermission> GetByAllow(bool isAllow)
+        public IQueryable<UserPermission> GetByAllow(string userId, bool isAllow)
         {
-            return DbSet.AsNoTracking().Where(up => up.Allow == isAllow);
+            return DbSet.AsNoTracking().Where(up => up.UserId == userId && up.Allow == isAllow);
         }
     }
 }

@@ -16,6 +16,12 @@ public static class IdentityExtension
                 .AddEntityFrameworkStores<AuthDbContext>()
                 .AddDefaultTokenProviders();
 
+        builder.Services.Configure<SecurityStampValidatorOptions>(options =>
+        {
+            // enables immediate logout, after updating the user's stat.
+            options.ValidationInterval = TimeSpan.Zero;
+        });
+
         builder.Services.AddIdentityServer(options =>
         {
             options.Events.RaiseErrorEvents = true;

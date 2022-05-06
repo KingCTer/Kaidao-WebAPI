@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,7 +50,6 @@ builder.Services.AddAuthentication(options =>
         };
 
     });
-
 
 builder.Services.AddHttpClient("Kaidao.Services.Api").ConfigurePrimaryHttpMessageHandler(() =>
 {

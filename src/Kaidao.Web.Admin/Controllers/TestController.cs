@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Kaidao.Web.Admin.Authorization;
 using Kaidao.Web.Admin.Constants;
+using System.Net;
 
 namespace Kaidao.Web.Admin.Controllers
 {
@@ -54,6 +55,18 @@ namespace Kaidao.Web.Admin.Controllers
 
             var body = await response.Content.ReadAsStringAsync();
 
+            var statusCode = response.StatusCode;
+            if (statusCode == HttpStatusCode.NonAuthoritativeInformation)
+            {
+                await HttpContext.SignOutAsync();
+            }
+            if (statusCode == HttpStatusCode.Forbidden)
+            {
+            }
+
+
+
+
 
             return Ok(body);
         }
@@ -71,6 +84,14 @@ namespace Kaidao.Web.Admin.Controllers
             var response = await client.GetAsync("api/Test/AllowUser");
 
             var body = await response.Content.ReadAsStringAsync();
+            var statusCode = response.StatusCode;
+            if (statusCode == HttpStatusCode.NonAuthoritativeInformation)
+            {
+                await HttpContext.SignOutAsync();
+            }
+            if (statusCode == HttpStatusCode.Forbidden)
+            {
+            }
 
             return Ok(body);
         }

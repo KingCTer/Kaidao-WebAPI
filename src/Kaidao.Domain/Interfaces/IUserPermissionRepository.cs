@@ -4,6 +4,6 @@ namespace Kaidao.Domain.Interfaces
 {
     public interface IUserPermissionRepository : IRepository<UserPermission>
     {
-        IQueryable<UserPermission> GetByAllow(bool isAllow);
+        IQueryable<UserPermission> GetByAllow(string userId, bool isAllow);
     }
 }

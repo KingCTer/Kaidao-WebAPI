@@ -2,6 +2,7 @@
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Kaidao.Domain.IdentityEntity;
+using Kaidao.Domain.Interfaces;
 using Kaidao.Infra.CrossCutting.Identity.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -17,17 +18,24 @@ public class IdentityProfileService : IProfileService
     private readonly AuthDbContext _context;
     private readonly RoleManager<AppRole> _roleManager;
 
+    private readonly IPermissionRepository _permissionRepository;
+    private readonly IUserPermissionRepository _userPermissionRepository;
+
     public IdentityProfileService(
         IUserClaimsPrincipalFactory<AppUser> claimsFactory,
         UserManager<AppUser> userManager,
         AuthDbContext context,
-        RoleManager<AppRole> roleManager
+        RoleManager<AppRole> roleManager,
+        IPermissionRepository permissionRepository,
+        IUserPermissionRepository userPermissionRepository
     )
     {
         _claimsFactory = claimsFactory;
         _userManager = userManager;
         _context = context;
         _roleManager = roleManager;
+        _permissionRepository = permissionRepository;
+        _userPermissionRepository = userPermissionRepository;
     }
 
     public async Task GetProfileDataAsync(ProfileDataRequestContext context)
@@ -50,17 +58,19 @@ public class IdentityProfileService : IProfileService
         //            where roles.Contains(r.Name)
         //            select f.Id + "_" + c.Id;
 
-        var query = (from p in _context.Permissions where roles.Contains(p.RoleId) select p.FunctionId + "_" + p.CommandId)
-                    .Union(from up in _context.UserPermissions where up.Allow select up.FunctionId + "_" + up.CommandId)
-                    .Except(from up in _context.UserPermissions where !up.Allow select up.FunctionId + "_" + up.CommandId);
+        var realtimePermissionsQuery =
+                (from p in _permissionRepository.GetByRoleId(roles) select p.FunctionId + "_" + p.CommandId)
+                .Union(from up in _userPermissionRepository.GetByAllow(user.Id, true) select up.FunctionId + "_" + up.CommandId)
+                .Except(from up in _userPermissionRepository.GetByAllow(user.Id, false) select up.FunctionId + "_" + up.CommandId);
 
-        var permissions = await query.Distinct().ToListAsync();
+
+        var realtimePermissionsList = realtimePermissionsQuery.Distinct().ToList();
 
         //Add more claims like this
         //claims.Add(new Claim(ClaimTypes.Name, user.UserName));
         //claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
         //claims.Add(new Claim(ClaimTypes.Role, string.Join(";", roles)));
-        claims.Add(new Claim("permissions", JsonSerializer.Serialize(permissions)));
+        claims.Add(new Claim("permissions", JsonSerializer.Serialize(realtimePermissionsQuery)));
 
         context.IssuedClaims = claims;
     }
