@@ -31,6 +31,9 @@ try
     //
     // ----- Swagger UI -----
     builder.AddSwaggerConfiguration();
+    //
+    // ----- DI -----
+    builder.RegisterServices();
 
 
     builder.Services.AddEndpointsApiExplorer();
