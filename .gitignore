@@ -347,3 +347,19 @@ healthchecksdb
 
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
+
+src/Kaidao.Web.Admin/wwwroot/assets/media/
+
+src/Kaidao.Services.Api/wwwroot/assets/media/
+
+src/Kaidao.Services.Api/wwwroot/assets/css/
+
+src/Kaidao.Services.Api/wwwroot/assets/js/
+
+src/Kaidao.Services.Api/wwwroot/assets/plugins/
+
+src/Kaidao.Web.Admin/wwwroot/assets/css/
+
+src/Kaidao.Web.Admin/wwwroot/assets/js/
+
+src/Kaidao.Web.Admin/wwwroot/assets/plugins/

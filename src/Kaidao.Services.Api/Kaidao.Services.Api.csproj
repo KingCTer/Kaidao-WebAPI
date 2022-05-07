@@ -24,9 +24,5 @@
     <ProjectReference Include="..\Kaidao.Infra.CrossCutting.IoC\Kaidao.Infra.CrossCutting.IoC.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
 
 </Project>
