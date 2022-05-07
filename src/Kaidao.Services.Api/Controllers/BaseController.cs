@@ -9,6 +9,5 @@ namespace Kaidao.Services.Api.Controllers
     [Authorize(LocalApi.PolicyName)]
     public class BaseController : Controller
     {
-
     }
 }

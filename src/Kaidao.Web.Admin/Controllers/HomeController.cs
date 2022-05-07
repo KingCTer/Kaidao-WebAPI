@@ -1,24 +1,22 @@
 ﻿using Kaidao.Web.Admin.Models;
+using Kaidao.Web.Share.ApiClient.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace Kaidao.Web.Admin.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IBaseApiClient baseApiClient) : base(baseApiClient)
         {
             _logger = logger;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
 
-        public IActionResult Privacy()
+        public IActionResult Index()
         {
             return View();
         }

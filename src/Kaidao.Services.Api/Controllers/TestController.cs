@@ -25,7 +25,7 @@ namespace Demo.IdsApi.Controllers
             {
                 var claimPermissionsList = JsonSerializer.Deserialize<List<string>>(permissionsClaim.Value);
             }
-            return Ok("AllowAdmin");
+            return Ok(JsonSerializer.Serialize("AllowAdmin"));
         }
 
         [HttpGet("AllowUser")]

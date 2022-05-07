@@ -1,4 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
+using Kaidao.Web.Share.ApiClient;
+using Kaidao.Web.Share.ApiClient.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -17,7 +19,7 @@ builder.Services.AddAuthentication(options =>
 })
     .AddCookie("Cookies", options =>
     {
-        options.AccessDeniedPath = "/ControllerName/AccessDenied";
+        options.AccessDeniedPath = "/AccessDenied";
     })
     .AddOpenIdConnect("oidc", options =>
     {
@@ -51,7 +53,8 @@ builder.Services.AddAuthentication(options =>
 
     });
 
-builder.Services.AddHttpClient("Kaidao.Services.Api").ConfigurePrimaryHttpMessageHandler(() =>
+
+builder.Services.AddHttpClient(builder.Configuration["KaidaoServicesApi:ClientName"]).ConfigurePrimaryHttpMessageHandler(() =>
 {
     var handler = new HttpClientHandler();
     var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -63,11 +66,16 @@ builder.Services.AddHttpClient("Kaidao.Services.Api").ConfigurePrimaryHttpMessag
     handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
     return handler;
 });
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(60);
     options.Cookie.HttpOnly = true;
 });
+
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddTransient<IBaseApiClient, BaseApiClient>();
 
 var app = builder.Build();
 
@@ -91,6 +99,11 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapDefaultControllerRoute()
         .RequireAuthorization();
+
+    endpoints.MapControllerRoute(
+        name: "AccessDenied",
+        pattern: "/AccessDenied",
+        new { controller = "Access", action = "AccessDenied" });
 
     //endpoints.MapControllerRoute(
     //    name: "default",

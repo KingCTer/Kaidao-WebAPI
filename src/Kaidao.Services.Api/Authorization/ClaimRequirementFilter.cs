@@ -1,8 +1,4 @@
 ﻿using Kaidao.Domain.Constants;
-using Kaidao.Domain.IdentityEntity;
-using Kaidao.Domain.Interfaces;
-using Kaidao.Infra.CrossCutting.Identity.Context;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text.Json;
@@ -14,70 +10,54 @@ public class ClaimRequirementFilter : IAuthorizationFilter
     private readonly FunctionCode _functionCode;
     private readonly CommandCode _commandCode;
 
-    private readonly UserManager<AppUser> _userManager;
-    private readonly AuthDbContext _context;
-    private readonly RoleManager<AppRole> _roleManager;
+    //private readonly UserManager<AppUser> _userManager;
+    //private readonly AuthDbContext _context;
+    //private readonly RoleManager<AppRole> _roleManager;
 
-    private readonly IPermissionRepository _permissionRepository;
-    private readonly IUserPermissionRepository _userPermissionRepository;
+    //private readonly IPermissionRepository _permissionRepository;
+    //private readonly IUserPermissionRepository _userPermissionRepository;
 
-    private readonly SignInManager<AppUser> _signInManager;
+    //private readonly SignInManager<AppUser> _signInManager;
+
+    //public ClaimRequirementFilter(
+    //    FunctionCode functionCode,
+    //    CommandCode commandCode,
+    //    UserManager<AppUser> userManager,
+    //    AuthDbContext context,
+    //    RoleManager<AppRole> roleManager,
+    //    IPermissionRepository permissionRepository,
+    //    IUserPermissionRepository userPermissionRepository,
+    //    SignInManager<AppUser> signInManager
+    //    )
+    //{
+    //    _functionCode = functionCode;
+    //    _commandCode = commandCode;
+    //    _userManager = userManager;
+    //    _context = context;
+    //    _roleManager = roleManager;
+    //    _permissionRepository = permissionRepository;
+    //    _userPermissionRepository = userPermissionRepository;
+    //    _signInManager = signInManager;
+    //}
 
     public ClaimRequirementFilter(
-        FunctionCode functionCode, 
-        CommandCode commandCode,
-        UserManager<AppUser> userManager,
-        AuthDbContext context,
-        RoleManager<AppRole> roleManager,
-        IPermissionRepository permissionRepository,
-        IUserPermissionRepository userPermissionRepository,
-        SignInManager<AppUser> signInManager
+        FunctionCode functionCode,
+        CommandCode commandCode
         )
     {
         _functionCode = functionCode;
         _commandCode = commandCode;
-        _userManager = userManager;
-        _context = context;
-        _roleManager = roleManager;
-        _permissionRepository = permissionRepository;
-        _userPermissionRepository = userPermissionRepository;
-        _signInManager = signInManager;
     }
 
-    public async void OnAuthorization(AuthorizationFilterContext context)
+    public void OnAuthorization(AuthorizationFilterContext context)
     {
-        var user = _userManager.GetUserAsync(context.HttpContext.User).Result;
-        if (user != null)
+        var permissionsClaim = context.HttpContext.User.Claims
+            .SingleOrDefault(c => c.Type == IdentityConstant.Claims.Permissions);
+        if (permissionsClaim != null)
         {
-            var roles = _userManager.GetRolesAsync(user).Result;
+            var claimPermissionsList = JsonSerializer.Deserialize<List<string>>(permissionsClaim.Value);
 
-            var realtimePermissionsQuery = 
-                (from p in _permissionRepository.GetByRoleId(roles) select p.FunctionId + "_" + p.CommandId)
-                .Union(from up in _userPermissionRepository.GetByAllow(user.Id, true) select up.FunctionId + "_" + up.CommandId)
-                .Except(from up in _userPermissionRepository.GetByAllow(user.Id,false) select up.FunctionId + "_" + up.CommandId);
-
-
-            var realtimePermissionsList = realtimePermissionsQuery.Distinct().ToList();
-
-            var permissionsClaim = context.HttpContext.User.Claims
-                .SingleOrDefault(c => c.Type == IdentityConstant.Claims.Permissions);
-            if (permissionsClaim != null)
-            {
-                var claimPermissionsList = JsonSerializer.Deserialize<List<string>>(permissionsClaim.Value);
-
-                if (!Enumerable.SequenceEqual(realtimePermissionsList, claimPermissionsList))
-                {
-                    context.Result = new StatusCodeResult(203);
-                    // delete local authentication cookie
-                    var task = _userManager.UpdateSecurityStampAsync(user).Result;
-                }
-
-                if (!claimPermissionsList!.Contains(_functionCode + "_" + _commandCode))
-                {
-                    context.Result = new ForbidResult();
-                }
-            }
-            else
+            if (!claimPermissionsList!.Contains(_functionCode + "_" + _commandCode))
             {
                 context.Result = new ForbidResult();
             }
@@ -87,5 +67,45 @@ public class ClaimRequirementFilter : IAuthorizationFilter
             context.Result = new ForbidResult();
         }
 
+        //var user = _userManager.GetUserAsync(context.HttpContext.User).Result;
+        //if (user != null)
+        //{
+        //    var roles = _userManager.GetRolesAsync(user).Result;
+
+        //    var realtimePermissionsQuery =
+        //        (from p in _permissionRepository.GetByRoleId(roles) select p.FunctionId + "_" + p.CommandId)
+        //        .Union(from up in _userPermissionRepository.GetByAllow(user.Id, true) select up.FunctionId + "_" + up.CommandId)
+        //        .Except(from up in _userPermissionRepository.GetByAllow(user.Id,false) select up.FunctionId + "_" + up.CommandId);
+
+        //    var realtimePermissionsList = realtimePermissionsQuery.Distinct().ToList();
+
+        //    var permissionsClaim = context.HttpContext.User.Claims
+        //        .SingleOrDefault(c => c.Type == IdentityConstant.Claims.Permissions);
+        //    if (permissionsClaim != null)
+        //    {
+        //        var claimPermissionsList = JsonSerializer.Deserialize<List<string>>(permissionsClaim.Value);
+
+        //        if (!Enumerable.SequenceEqual(realtimePermissionsList, claimPermissionsList))
+        //        {
+        //            context.Result = new StatusCodeResult(203);
+        //            // delete local authentication cookie
+        //            //var task = _userManager.UpdateSecurityStampAsync(user).Result;
+        //            await _signInManager.SignOutAsync();
+        //        }
+
+        //        if (!claimPermissionsList!.Contains(_functionCode + "_" + _commandCode))
+        //        {
+        //            context.Result = new ForbidResult();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        context.Result = new ForbidResult();
+        //    }
+        //}
+        //else
+        //{
+        //    context.Result = new ForbidResult();
+        //}
     }
 }
