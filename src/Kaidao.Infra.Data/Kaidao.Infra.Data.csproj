@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Context\" />
+    <Folder Include="Migrations\EventStoreSQL\" />
   </ItemGroup>
 
 </Project>

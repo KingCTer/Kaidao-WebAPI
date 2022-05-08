@@ -1,14 +1,20 @@
 ﻿using Kaidao.Domain.Constants;
-using Kaidao.Services.Api.Controllers;
+using Kaidao.Domain.Core.Bus;
+using Kaidao.Domain.Core.Notifications;
 using Kaidao.Services.Api.IdentityServer.Authorization;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
-namespace Demo.IdsApi.Controllers
+namespace Kaidao.Services.Api.Controllers
 {
     public class TestController : BaseController
     {
+        public TestController(INotificationHandler<DomainNotification> notifications, IMediatorHandler mediator) : base(notifications, mediator)
+        {
+        }
+
         [HttpGet("AllowAnonymous")]
         [AllowAnonymous]
         public IActionResult AllowAnonymous()

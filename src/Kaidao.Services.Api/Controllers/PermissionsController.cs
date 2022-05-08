@@ -1,6 +1,9 @@
 ﻿using Kaidao.Domain.Constants;
+using Kaidao.Domain.Core.Bus;
+using Kaidao.Domain.Core.Notifications;
 using Kaidao.Domain.IdentityEntity;
 using Kaidao.Domain.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -17,29 +20,32 @@ namespace Kaidao.Services.Api.Controllers
         private readonly IUserPermissionRepository _userPermissionRepository;
 
         public PermissionsController(
-            UserManager<AppUser> userManager, 
-            IPermissionRepository permissionRepository, 
-            IUserPermissionRepository userPermissionRepository)
+            INotificationHandler<DomainNotification> notifications, 
+            IMediatorHandler mediator,
+            UserManager<AppUser> userManager,
+            IPermissionRepository permissionRepository,
+            IUserPermissionRepository userPermissionRepository
+            ) : base(notifications, mediator)
         {
             _userManager = userManager;
             _permissionRepository = permissionRepository;
             _userPermissionRepository = userPermissionRepository;
         }
+        
 
         [HttpGet("check")]
         [AllowAnonymous]
         public async Task<IActionResult> CheckPermissinStatus()
         {
-            var user = _userManager.GetUserAsync(HttpContext.User).Result;
+            var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user != null)
             {
-                var roles = _userManager.GetRolesAsync(user).Result;
+                var roles = await _userManager.GetRolesAsync(user);
 
                 var realtimePermissionsQuery =
                     (from p in _permissionRepository.GetByRoleId(roles) select p.FunctionId + "_" + p.CommandId)
                     .Union(from up in _userPermissionRepository.GetByAllow(user.Id, true) select up.FunctionId + "_" + up.CommandId)
                     .Except(from up in _userPermissionRepository.GetByAllow(user.Id, false) select up.FunctionId + "_" + up.CommandId);
-
 
                 var realtimePermissionsList = realtimePermissionsQuery.Distinct().ToList();
 
@@ -51,7 +57,6 @@ namespace Kaidao.Services.Api.Controllers
 
                     if (!Enumerable.SequenceEqual(realtimePermissionsList, claimPermissionsList))
                     {
-                        var task = _userManager.UpdateSecurityStampAsync(user).Result;
                         return Unauthorized();
                     }
 
@@ -66,9 +71,6 @@ namespace Kaidao.Services.Api.Controllers
             {
                 return Unauthorized();
             }
-
-
-
             
         }
     }

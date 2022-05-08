@@ -1,7 +1,7 @@
 ﻿using Kaidao.Infra.CrossCutting.Identity.Context;
 using Kaidao.Infra.CrossCutting.Identity.Seeds;
+using Kaidao.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 
 namespace Kaidao.Services.Api.ProgramExtensions;
 
@@ -21,7 +21,29 @@ public static class DatabaseExtension
                 options.EnableSensitiveDataLogging();
             }
         });
-        
+
+        // Add ApplicationDbContext
+        builder.Services.AddDbContext<AppDbContext>(options => {
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+                o => o.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
+            if (!builder.Environment.IsProduction())
+            {
+                options.EnableDetailedErrors();
+                options.EnableSensitiveDataLogging();
+            }
+        });
+
+        // Add EventStoreSqlContext
+        builder.Services.AddDbContext<EventStoreSqlContext>(options => {
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+                    o => o.MigrationsAssembly(typeof(EventStoreSqlContext).Assembly.FullName));
+            if (!builder.Environment.IsProduction())
+            {
+                options.EnableDetailedErrors();
+                options.EnableSensitiveDataLogging();
+            }
+        });
+
         return builder;
     }
 
