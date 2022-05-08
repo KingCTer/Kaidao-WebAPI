@@ -1,4 +1,5 @@
 using Kaidao.Services.Api.ProgramExtensions;
+using MediatR;
 using Serilog;
 
 SerilogExtension.BootstrapLogger("Starting up");
@@ -29,8 +30,14 @@ try
     // ----- Cors -----
     builder.Services.AddCors();
     //
+    // ----- AutoMapper -----
+    builder.AddAutoMapperConfiguration();
+    //
     // ----- Swagger UI -----
     builder.AddSwaggerConfiguration();
+    //
+    // ----- MediatR -----
+    builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
     //
     // ----- DI -----
     builder.RegisterServices();
