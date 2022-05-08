@@ -1,4 +1,4 @@
-﻿ using Kaidao.Domain.Core.Bus;
+﻿using Kaidao.Domain.Core.Bus;
 using Kaidao.Domain.Core.Notifications;
 using Kaidao.Services.Api.Query;
 using MediatR;
@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using static Duende.IdentityServer.IdentityServerConstants;
 
-namespace Kaidao.Services.Api.Controllers
+namespace Kaidao.Services.Api.Controllers.Base
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -29,7 +29,7 @@ namespace Kaidao.Services.Api.Controllers
 
         protected bool IsValidOperation()
         {
-            return (!_notifications.HasNotifications());
+            return !_notifications.HasNotifications();
         }
 
         protected new IActionResult Response(object result = null, int totalRecords = 0)
@@ -60,7 +60,7 @@ namespace Kaidao.Services.Api.Controllers
                     success = true,
                     pageNumber = filter.PageNumber,
                     pageSize = filter.PageSize,
-                    totalPages = Convert.ToInt32(Math.Ceiling(((double)totalRecords / (double)filter.PageSize))),
+                    totalPages = Convert.ToInt32(Math.Ceiling((double)totalRecords / (double)filter.PageSize)),
                     totalRecords,
                     data = result,
                     message = filter.Query

@@ -3,6 +3,7 @@ using Kaidao.Domain.Core.Bus;
 using Kaidao.Domain.Core.Notifications;
 using Kaidao.Domain.IdentityEntity;
 using Kaidao.Domain.Interfaces;
+using Kaidao.Services.Api.Controllers.Base;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
