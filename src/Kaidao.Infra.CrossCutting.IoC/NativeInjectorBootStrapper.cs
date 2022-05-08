@@ -1,4 +1,6 @@
-﻿using Kaidao.Domain.Core.Bus;
+﻿using Kaidao.Application.AppServices;
+using Kaidao.Application.AppServices.Interfaces;
+using Kaidao.Domain.Core.Bus;
 using Kaidao.Domain.Core.Events;
 using Kaidao.Domain.Core.Notifications;
 using Kaidao.Domain.Interfaces;
@@ -24,11 +26,15 @@ public class NativeInjectorBootStrapper
         // Domain Bus (Mediator)
         services.AddScoped<IMediatorHandler, InMemoryBus>();
 
+        // Application
+        services.AddScoped<IUserAppService, UserAppService>();
+
         // Domain - Events
         services.AddScoped<INotificationHandler<DomainNotification>, DomainNotificationHandler>();
 
         // Infra - Data
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IPermissionRepository, PermissionRepository>();
         services.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
 
