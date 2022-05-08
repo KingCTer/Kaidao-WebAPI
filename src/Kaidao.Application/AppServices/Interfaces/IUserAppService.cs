@@ -1,4 +1,5 @@
 ﻿using Kaidao.Application.Responses;
+using Kaidao.Application.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Kaidao.Application.AppServices.Interfaces
 {
     public interface IUserAppService : IDisposable
     {
-        IEnumerable<UserResponse> GetAll();
-        RepositoryResponse<UserResponse> GetAll(int skip, int take, string query);
+        IEnumerable<UserViewModel> GetAll();
+        RepositoryResponse<UserViewModel> GetAll(int skip, int take, string query);
     }
 }

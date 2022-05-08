@@ -1,0 +1,90 @@
+﻿@model Kaidao.Application.Common.PagedResultBase;
+@{
+    var urlTemplate = Url.Action() + "?pageIndex={0}";
+    var request = ViewContext.HttpContext.Request;
+    foreach (var key in request.Query.Keys)
+    {
+        if (key == "pageIndex")
+        {
+            continue;
+        }
+        if (request.Query[key].Count > 1)
+        {
+            foreach (var item in (string[])request.Query[key])
+            {
+                urlTemplate += "&" + key + "=" + item;
+            }
+        }
+        else
+        {
+            urlTemplate += "&" + key + "=" + request.Query[key];
+        }
+    }
+
+    var startIndex = Math.Max(Model.PageIndex - 2, 1);
+    var finishIndex = Math.Min(Model.PageIndex + 2, Model.PageCount);
+
+    if (Model.PageIndex <= 2)
+    {
+        finishIndex = Math.Min(5, Model.PageCount);
+    }
+    if (Model.PageIndex >= Model.PageCount - 2)
+    {
+        startIndex = Math.Max(Model.PageCount - 4, 1);
+    }
+
+}
+
+<!--begin::Pagination-->
+@if (Model.PageCount > 1)
+{
+    <div class="dataTables_paginate paging_simple_numbers" id="kt_table_users_paginate">
+        <ul class="pagination">
+
+            @if (Model.PageIndex == 1)
+            {
+                <li class="page-item previous disabled"><a class="page-link"><i class="previous"></i><i class="previous"></i></a></li>
+                <li class="page-item previous disabled"><a class="page-link"><i class="previous"></i></a></li>
+            }
+            else
+            {
+                <li class="page-item previous"><a href="@urlTemplate.Replace("{0}", "1")" class="page-link"><i class="previous"></i><i class="previous"></i></a></li>
+                <li class="page-item previous"><a href="@urlTemplate.Replace("{0}", (Model.PageIndex-1).ToString())" class="page-link"><i class="previous"></i></a></li>
+            }
+
+            @if (startIndex > 1)
+            {
+                <li class="page-item "><a class="page-link">...</a></li>
+            }
+
+            @for (var index = startIndex; index <= finishIndex; index++)
+            {
+                if (index == Model.PageIndex)
+                {
+                    <li class="page-item active"><a class="page-link">@index</a></li>
+                }
+                else
+                {
+                    <li class="page-item "><a href="@urlTemplate.Replace("{0}", index.ToString())" class="page-link">@index</a></li>
+                }
+            }
+
+            @if (finishIndex < Model.PageCount)
+            {
+                <li class="page-item "><a class="page-link">...</a></li>
+            }
+
+            @if (Model.PageIndex == Model.PageCount)
+            {
+                <li class="page-item next disabled"><a class="page-link"><i class="next"></i></a></li>
+                <li class="page-item next disabled"><a class="page-link"><i class="next"></i><i class="next"></i></a></li>
+            }
+            else
+            {
+                <li class="page-item next"><a href="@urlTemplate.Replace("{0}", (Model.PageIndex+1).ToString())"  class="page-link"><i class="next"></i></a></li>
+                <li class="page-item next"><a href="@urlTemplate.Replace("{0}", Model.PageCount.ToString())" class="page-link"><i class="next"></i><i class="next"></i></a></li>
+            }
+        </ul>
+    </div>
+}
+<!--end:: Pagination-->

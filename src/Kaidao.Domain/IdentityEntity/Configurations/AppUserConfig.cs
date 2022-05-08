@@ -16,6 +16,12 @@ namespace Kaidao.Domain.IdentityEntity.Configurations
             builder.Property(p => p.PhoneNumber)
                 .HasMaxLength(20)
                 .IsUnicode(false);
+
+            builder.Property(x => x.FirstName).IsRequired(false).HasMaxLength(200);
+
+            builder.Property(x => x.LastName).IsRequired(false).HasMaxLength(200);
+
+            builder.Property(x => x.Dob).IsRequired();
         }
     }
 }

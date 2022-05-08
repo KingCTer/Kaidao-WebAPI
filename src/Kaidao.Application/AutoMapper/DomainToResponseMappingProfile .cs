@@ -8,8 +8,7 @@ namespace Kaidao.Application.AutoMapper
     {
         public DomainToResponseMappingProfile()
         {
-            CreateMap<AppUser, UserResponse>()
-                .ConstructUsing(c => new UserResponse(c.Id, c.UserName, c.Email, c.PhoneNumber));
+            
         }
     }
 }

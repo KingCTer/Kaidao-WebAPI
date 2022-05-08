@@ -1,6 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
+using Kaidao.Web.Admin.ProgramExtensions;
 using Kaidao.Web.Share.ApiClient;
 using Kaidao.Web.Share.ApiClient.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -11,6 +13,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
+
+
+
+
+// ----- Database -----
+builder.AddDatabaseConfiguration();
+// ----- AutoMapper -----
+builder.AddAutoMapperConfiguration();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -54,6 +65,12 @@ builder.Services.AddAuthentication(options =>
     });
 
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
+    options.Cookie.HttpOnly = true;
+});
+
 builder.Services.AddHttpClient(builder.Configuration["KaidaoServicesApi:ClientName"]).ConfigurePrimaryHttpMessageHandler(() =>
 {
     var handler = new HttpClientHandler();
@@ -67,14 +84,11 @@ builder.Services.AddHttpClient(builder.Configuration["KaidaoServicesApi:ClientNa
     return handler;
 });
 
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(60);
-    options.Cookie.HttpOnly = true;
-});
+// ----- MediatR -----
+builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
+// ----- DI -----
+builder.RegisterServices();
 
-
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<IBaseApiClient, BaseApiClient>();
 
 var app = builder.Build();

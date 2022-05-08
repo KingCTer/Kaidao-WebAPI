@@ -8,6 +8,18 @@ namespace Kaidao.Domain.Specifications
             : base(i => true)
         {
             ApplyPaging(skip, take);
+
+            if (!string.IsNullOrEmpty(query))
+            {
+                AddWhere(x =>
+                    x.UserName.Contains(query)
+                 || x.PhoneNumber.Contains(query)
+                 || x.FirstName.Contains(query)
+                 || x.LastName.Contains(query)
+                 || x.LastName.Contains(query)
+                 || x.Email.Contains(query)
+                );
+            }
         }
     }
 }

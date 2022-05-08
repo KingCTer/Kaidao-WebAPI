@@ -7,11 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.4" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.17.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kaidao.Application\Kaidao.Application.csproj" />
+    <ProjectReference Include="..\Kaidao.Infra.CrossCutting.IoC\Kaidao.Infra.CrossCutting.IoC.csproj" />
     <ProjectReference Include="..\Kaidao.Web.Share\Kaidao.Web.Share.csproj" />
   </ItemGroup>
 
