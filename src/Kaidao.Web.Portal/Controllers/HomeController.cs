@@ -1,4 +1,5 @@
 ﻿using Kaidao.Web.Portal.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -16,6 +17,14 @@ namespace Kaidao.Web.Portal.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Login(string returnUrl)
+        {
+            return Challenge(new AuthenticationProperties
+            {
+                RedirectUri = returnUrl
+            });
         }
 
         public IActionResult Privacy()

@@ -15,9 +15,6 @@ builder.Services.AddControllersWithViews();
 JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
 
-
-
-
 // ----- Database -----
 builder.AddDatabaseConfiguration();
 // ----- AutoMapper -----

@@ -10,9 +10,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using static Duende.IdentityServer.IdentityServerConstants;
 
 namespace Kaidao.Services.Api.Controllers
 {
+    [Authorize(LocalApi.PolicyName)]
     public class PermissionsController : BaseController
     {
         private readonly UserManager<AppUser> _userManager;

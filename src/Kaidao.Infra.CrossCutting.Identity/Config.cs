@@ -54,34 +54,65 @@ public static class Config
             },
 
             // interactive client using code flow + pkce
-                new Client
-                {
-                    ClientId = "admin",
-                    ClientSecrets = { new Secret("AdminSecret".Sha256()) },
+            new Client
+            {
+                ClientId = "admin",
+                ClientSecrets = { new Secret("AdminSecret".Sha256()) },
 
-                    AllowedGrantTypes = GrantTypes.Code,
+                AllowedGrantTypes = GrantTypes.Code,
 
-                    RequireConsent = false,
-                    RequirePkce = true,
-                    AllowOfflineAccess = true,
+                RequireConsent = false,
+                RequirePkce = true,
+                AllowOfflineAccess = true,
 
-                    // where to redirect to after login
-                    RedirectUris = { "https://localhost:5001/signin-oidc" },
+                // where to redirect to after login
+                RedirectUris = { "https://localhost:5001/signin-oidc" },
 
-                    FrontChannelLogoutUri = "https://localhost:5001/signout-oidc",
+                FrontChannelLogoutUri = "https://localhost:5001/signout-oidc",
 
-                    // where to redirect to after logout
-                    PostLogoutRedirectUris = { "https://localhost:5001/signout-callback-oidc" },
+                // where to redirect to after logout
+                PostLogoutRedirectUris = { "https://localhost:5001/signout-callback-oidc" },
 
-                    AllowedScopes = {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.OfflineAccess,
-                        IdentityServerConstants.LocalApi.ScopeName,
-                        MyIdentityServerConstants.PrivateApi.ScopeName,
-                        "roles",
-                        "permissions"
-                    }
-                },
+                AllowedScopes = {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.OfflineAccess,
+                    IdentityServerConstants.LocalApi.ScopeName,
+                    MyIdentityServerConstants.PrivateApi.ScopeName,
+                    "roles",
+                    "permissions"
+                }
+            },
+
+            // interactive client using code flow + pkce
+            new Client
+            {
+                ClientId = "portal",
+                ClientSecrets = { new Secret("PortalSecret".Sha256()) },
+
+                AllowedGrantTypes = GrantTypes.Code,
+
+                RequireConsent = false,
+                RequirePkce = true,
+                AllowOfflineAccess = true,
+
+                // where to redirect to after login
+                RedirectUris = { "https://localhost:5002/signin-oidc" },
+
+                FrontChannelLogoutUri = "https://localhost:5002/signout-oidc",
+
+                // where to redirect to after logout
+                PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+
+                AllowedScopes = {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.OfflineAccess,
+                    IdentityServerConstants.LocalApi.ScopeName,
+                    MyIdentityServerConstants.PrivateApi.ScopeName,
+                    "roles",
+                    "permissions"
+                }
+            },
         };
 }
