@@ -4,11 +4,14 @@ using Kaidao.Domain.Core.Notifications;
 using Kaidao.Services.Api.Controllers.Base;
 using Kaidao.Services.Api.Query;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Duende.IdentityServer.IdentityServerConstants;
 
 namespace Kaidao.Services.Api.Controllers
 {
+    [Authorize(LocalApi.PolicyName)]
     public class UsersController : BaseController
     {
         private readonly IUserAppService _userAppService;

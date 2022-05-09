@@ -11,7 +11,6 @@ namespace Kaidao.Services.Api.Controllers.Base
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(LocalApi.PolicyName)]
     public abstract class BaseController : ControllerBase
     {
         private readonly DomainNotificationHandler _notifications;
@@ -55,12 +54,13 @@ namespace Kaidao.Services.Api.Controllers.Base
         {
             if (IsValidOperation())
             {
+                var tempTotalPages = filter.PageSize == 0 ? 0 : Convert.ToInt32(Math.Ceiling((double)totalRecords / (double)filter.PageSize));
                 return Ok(new
                 {
                     success = true,
                     pageNumber = filter.PageNumber,
                     pageSize = filter.PageSize,
-                    totalPages = Convert.ToInt32(Math.Ceiling((double)totalRecords / (double)filter.PageSize)),
+                    totalPages = tempTotalPages,
                     totalRecords,
                     data = result,
                     message = filter.Query

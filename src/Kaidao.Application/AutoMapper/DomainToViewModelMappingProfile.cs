@@ -1,5 +1,6 @@
 using AutoMapper;
 using Kaidao.Application.ViewModels;
+using Kaidao.Domain.AppEntity;
 using Kaidao.Domain.IdentityEntity;
 
 namespace Kaidao.Application.AutoMapper
@@ -9,6 +10,11 @@ namespace Kaidao.Application.AutoMapper
         public DomainToViewModelMappingProfile()
         {
             CreateMap<AppUser, UserViewModel>();
+
+            CreateMap<Author, AuthorViewModel>();
+            CreateMap<Category, CategoryViewModel>();
+            CreateMap<Book, BookViewModel>();
+            CreateMap<Chapter, ChapterViewModel>();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Kaidao.Domain.Interfaces
     {
         void Add(TEntity obj);
 
-        TEntity GetById(string id);
+        TEntity GetById(Guid id);
 
         IQueryable<TEntity> GetAll();
 

@@ -1,16 +1,16 @@
 ﻿using Kaidao.Domain.Interfaces;
 using Kaidao.Domain.Specifications;
-using Kaidao.Infra.CrossCutting.Identity.Context;
+using Kaidao.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Kaidao.Infra.CrossCutting.Identity.Repository
+namespace Kaidao.Infra.Data.Repository
 {
     public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly AuthDbContext Db;
+        protected readonly AppDbContext Db;
         protected readonly DbSet<TEntity> DbSet;
 
-        public Repository(AuthDbContext context)
+        public Repository(AppDbContext context)
         {
             Db = context;
             DbSet = Db.Set<TEntity>();
