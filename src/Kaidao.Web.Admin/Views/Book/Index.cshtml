@@ -176,11 +176,15 @@
 							</svg>
 						</span>
 						<!--end::Svg Icon-->
-						<input type="text" data-kt-ecommerce-product-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search Product" />
+						<form asp-action="Index" method="get">
+							<input type="hidden" name="queryType" value="where:keyword=">
+							<input name="query" value="@ViewBag.Keyword" type="text" class="form-control form-control-solid w-250px ps-14" placeholder="Tìm kiếm..." />
+						</form>
 					</div>
 					<!--end::Search-->
 				</div>
 				<!--end::Card title-->
+				<h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">@Model.TotalRecords Total Records</h1>
 				<!--begin::Card toolbar-->
 				<div class="card-toolbar flex-row-fluid justify-content-end gap-5">
 					<div class="w-100 mw-150px">
@@ -216,12 +220,12 @@
 								</div>
 							</th>
 							<th class="min-w-200px">Truyện</th>
-							<th class="text-end min-w-100px">Trạng thái</th>
-							<th class="text-end min-w-70px">Số chương</th>
-							<th class="text-end min-w-100px">Thể loại</th>
-							<th class="text-end min-w-100px">Tác giả</th>
+							<th class="text-center min-w-100px">Trạng thái</th>
+							<th class="text-center min-w-70px">Chương</th>
+							<th class="text-center min-w-200px">Thể loại</th>
+							<th class="text-center min-w-100px">Tác giả</th>
 							<th class="text-end min-w-100px">Lượt xem</th>
-							<th class="text-end min-w-70px">Action</th>
+							<th class="text-end min-w-150px">Action</th>
 						</tr>
 						<!--end::Table row-->
 					</thead>
@@ -256,22 +260,22 @@
 								</td>
 								<!--end::Category=-->
 								<!--begin::SKU=-->
-								<td class="text-end pe-0">
+								<td class="text-center pe-0">
 									<span class="fw-bolder">@item.Status</span>
 								</td>
 								<!--end::SKU=-->
 								<!--begin::Qty=-->
-								<td class="text-end pe-0">
+								<td class="text-center pe-0">
 									<span class="fw-bolder ms-3">@item.ChapterTotal</span>
 								</td>
 								<!--end::Qty=-->
 								<!--begin::Price=-->
-								<td class="text-end pe-0">
+								<td class="text-center pe-0">
 									<span class="fw-bolder text-dark">@item.CategoryName</span>
 								</td>
 								<!--end::Price=-->
 								<!--begin::Rating-->
-								<td class="text-end pe-0">
+								<td class="text-center pe-0">
 									<span class="fw-bolder ms-3">@item.AuthorName</span>
 								</td>
 								<!--end::Rating-->

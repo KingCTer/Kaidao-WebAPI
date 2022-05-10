@@ -17,9 +17,15 @@ namespace Kaidao.Web.Admin.Controllers
             _bookAppService = bookAppService;
         }
 
-        public IActionResult Index(PaginationFilter filter)
+        public IActionResult Index(PaginationFilter filter, string queryType = "")
         {
-            var data = _bookAppService.GetAll((filter.PageNumber - 1) * filter.PageSize, filter.PageSize, filter.Query);
+            var query = "";
+            if (queryType != "")
+            {
+                query = queryType + filter.Query;
+            }
+
+            var data = _bookAppService.GetAll((filter.PageNumber - 1) * filter.PageSize, filter.PageSize, query);
 
             var pagedResult = new PagedResult<BookResponse>()
             {
@@ -28,6 +34,8 @@ namespace Kaidao.Web.Admin.Controllers
                 PageSize = filter.PageSize,
                 PageIndex = filter.PageNumber
             };
+
+            ViewBag.Keyword = filter.Query;
 
             return View(pagedResult);
         }

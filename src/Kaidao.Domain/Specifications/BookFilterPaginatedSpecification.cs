@@ -55,6 +55,18 @@ namespace Kaidao.Domain.Specifications
                                 AddWhere(x => x.Category.Name == where[1]);
                                 break;
 
+                            case "where:keyword":
+                                if (!string.IsNullOrEmpty(where[1]))
+                                {
+                                    AddWhere(x =>
+                                        x.Name.Contains(where[1])
+                                     || x.Status.Contains(where[1])
+                                     || x.Author.Name.Contains(where[1])
+                                     || x.Category.Name.Contains(where[1])
+                                    );
+                                }
+                                break;
+
                             default:
                                 break;
                         }
