@@ -1,3 +1,7 @@
+using Kaidao.Web.Portal.ProgramExtensions;
+using Kaidao.Web.Share.ApiClient;
+using Kaidao.Web.Share.ApiClient.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,6 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
+// ----- Database -----
+builder.AddDatabaseConfiguration();
+// ----- AutoMapper -----
+builder.AddAutoMapperConfiguration();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -68,6 +77,13 @@ builder.Services.AddHttpClient(builder.Configuration["KaidaoServicesApi:ClientNa
     handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
     return handler;
 });
+
+// ----- MediatR -----
+builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
+// ----- DI -----
+builder.RegisterServices();
+
+builder.Services.AddTransient<IBaseApiClient, BaseApiClient>();
 
 var app = builder.Build();
 

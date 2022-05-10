@@ -1,4 +1,6 @@
-﻿using Kaidao.Web.Portal.Models;
+﻿using Kaidao.Application.AppServices.Interfaces;
+using Kaidao.Web.Portal.Models;
+using Kaidao.Web.Portal.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -9,14 +11,25 @@ namespace Kaidao.Web.Portal.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IBookAppService _bookAppService;
+
+        public HomeController(ILogger<HomeController> logger, IBookAppService bookAppService)
         {
             _logger = logger;
+            _bookAppService = bookAppService;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var viewModel = new HomeViewModel
+            {
+                NewlyBooks = _bookAppService.GetAll(0, 12, "orderBy:key:desc"),
+                FavoriteBooks = _bookAppService.GetAll(0, 12, "orderBy:like:desc"),
+                PopularBook = _bookAppService.GetAll(0, 12, "orderBy:view:desc")
+            };
+
+
+            return View(viewModel);
         }
 
         public IActionResult Login(string returnUrl)

@@ -135,11 +135,11 @@ namespace Kaidao.Application.AppServices
                     var chapterInDatabase = _mapper.Map<ChapterViewModel>(_chapterRepository.GetChapterByBookIdAndOrder(chapterViewModel.BookId, chapterViewModel.Order));
                     if (chapterInDatabase == null)
                     {
-                        response = httpClient.GetAsync(chapterViewModel.Url).Result;
-                        string htmlChapter = WebUtility.HtmlDecode(response.Content.ReadAsStringAsync().Result);
-                        string chapterContentTemp = Regex.Match(htmlChapter, @"(?=box-chap box-chap).*?(?<=<\/div>)", RegexOptions.Singleline).Value.ToString();
-                        chapterViewModel.Content = Regex.Match(chapterContentTemp, @"(?<=>).*?(?=<\/div>)", RegexOptions.Singleline).Value.ToString();
-
+                        //response = httpClient.GetAsync(chapterViewModel.Url).Result;
+                        //string htmlChapter = WebUtility.HtmlDecode(response.Content.ReadAsStringAsync().Result);
+                        //string chapterContentTemp = Regex.Match(htmlChapter, @"(?=box-chap box-chap).*?(?<=<\/div>)", RegexOptions.Singleline).Value.ToString();
+                        //chapterViewModel.Content = Regex.Match(chapterContentTemp, @"(?<=>).*?(?=<\/div>)", RegexOptions.Singleline).Value.ToString();
+                        chapterViewModel.Content = "";
                         var registerChapterCommand = _mapper.Map<RegisterNewChapterCommand>(chapterViewModel);
                         Bus.SendCommand(registerChapterCommand);
                     }
