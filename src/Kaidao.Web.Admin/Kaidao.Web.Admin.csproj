@@ -19,4 +19,9 @@
     <ProjectReference Include="..\Kaidao.Web.Share\Kaidao.Web.Share.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+    <Folder Include="wwwroot\user-content\" />
+  </ItemGroup>
+
 </Project>

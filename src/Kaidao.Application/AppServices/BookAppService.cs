@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using FluentValidation.Results;
 using Kaidao.Application.AppServices.Interfaces;
 using Kaidao.Application.Responses;
+using Kaidao.Application.Services;
 using Kaidao.Application.ViewModels;
 using Kaidao.Domain.Commands.Author;
 using Kaidao.Domain.Commands.Book;
@@ -11,8 +13,11 @@ using Kaidao.Domain.Core.Bus;
 using Kaidao.Domain.Interfaces;
 using Kaidao.Domain.Specifications;
 using Kaidao.Infra.Data.Repository.EventSourcing;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 
 namespace Kaidao.Application.AppServices
@@ -26,6 +31,11 @@ namespace Kaidao.Application.AppServices
         private readonly IAuthorRepository _authorRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IChapterRepository _chapterRepository;
+        private readonly IStorageService _storageService;
+
+        private readonly IConfiguration _configuration;
+
+        private const string USER_CONTENT_FOLDER_NAME = "user-content";
 
         public BookAppService(
             IMapper mapper,
@@ -34,7 +44,9 @@ namespace Kaidao.Application.AppServices
             IBookRepository bookRepository,
             IAuthorRepository authorRepository,
             ICategoryRepository categoryRepository,
-            IChapterRepository chapterRepository
+            IChapterRepository chapterRepository,
+            IStorageService storageService,
+            IConfiguration configuration
             )
         {
             _mapper = mapper;
@@ -44,6 +56,8 @@ namespace Kaidao.Application.AppServices
             _authorRepository = authorRepository;
             _categoryRepository = categoryRepository;
             _chapterRepository = chapterRepository;
+            _storageService = storageService;
+            _configuration = configuration;
         }
 
         public void Crawl(string url)
@@ -180,6 +194,57 @@ namespace Kaidao.Application.AppServices
         public void Dispose()
         {
             GC.SuppressFinalize(this);
+        }
+
+        private async Task<string> SaveFile(IFormFile file)
+        {
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
+            await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
+            return _configuration["ApplicationUrl"] + "/" + USER_CONTENT_FOLDER_NAME + "/" + fileName;
+        }
+
+        public bool Create(BookCreateRequest bookCreateRequest)
+        {
+            var cover = "";
+            if (bookCreateRequest.ThumbnailImage != null)
+            {
+                cover = this.SaveFile(bookCreateRequest.ThumbnailImage).Result;
+            }
+
+            Guid authorId;
+            var author = _mapper.Map<AuthorViewModel>(_authorRepository.GetByName(bookCreateRequest.AuthorName));
+            if (author == null)
+            {
+                var registerAuthorCommand = _mapper.Map<RegisterNewAuthorCommand>(new AuthorViewModel(bookCreateRequest.AuthorName));
+                Bus.SendCommand(registerAuthorCommand);
+                authorId = _mapper.Map<AuthorViewModel>(_authorRepository.GetByName(bookCreateRequest.AuthorName)).Id;
+            }
+            else
+            {
+                authorId = author.Id;
+            }
+
+            var bookViewModel = new BookViewModel
+            {
+                Name = bookCreateRequest.Name,
+                Status = bookCreateRequest.Status,
+                Intro = bookCreateRequest.Intro,
+                CategoryId = bookCreateRequest.CategoryId,
+                AuthorId = authorId,
+                Key = Guid.NewGuid().ToString(),
+                View = 0,
+                Like = 0,
+                ChapterTotal = 0,
+                Cover = cover
+            };
+
+
+
+
+            var registerCommand = _mapper.Map<RegisterNewBookCommand>(bookViewModel);
+            
+            return Bus.SendCommand(registerCommand).IsCompleted;
         }
     }
 }

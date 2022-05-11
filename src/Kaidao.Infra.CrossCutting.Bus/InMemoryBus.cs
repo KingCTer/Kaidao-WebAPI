@@ -1,4 +1,5 @@
-﻿using Kaidao.Domain.Core.Bus;
+﻿using FluentValidation.Results;
+using Kaidao.Domain.Core.Bus;
 using Kaidao.Domain.Core.Commands;
 using Kaidao.Domain.Core.Events;
 using MediatR;
@@ -19,6 +20,11 @@ namespace Kaidao.Infra.CrossCutting.Bus
         public Task SendCommand<T>(T command) where T : Command
         {
             return _mediator.Send(command);
+        }
+
+        public async Task<ValidationResult> SendCommandWithValidationResult<T>(T command) where T : Command
+        {
+            return await _mediator.Send<ValidationResult>((IRequest<ValidationResult>)command);
         }
 
         public Task RaiseEvent<T>(T @event) where T : Event

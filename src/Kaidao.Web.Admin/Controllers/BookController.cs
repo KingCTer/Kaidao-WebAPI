@@ -2,7 +2,6 @@
 using Kaidao.Application.Common;
 using Kaidao.Application.Responses;
 using Kaidao.Application.ViewModels;
-using Kaidao.Web.Admin.ViewModels;
 using Kaidao.Web.Share.ApiClient.Interfaces;
 using Kaidao.Web.Share.Query;
 using Microsoft.AspNetCore.Mvc;
@@ -57,9 +56,21 @@ namespace Kaidao.Web.Admin.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create([FromForm] BookCreateRequest request)
+        public IActionResult Create([FromForm] BookCreateRequest request)
         {
+            request.CategoryList = _categoryAppService.GetAll().ToList();
+
+            if (!ModelState.IsValid)
+                return View(request);
+
+            if (_bookAppService.Create(request))
+            {
+                return RedirectToAction("Index");
+            }
+
+
             return View(request);
+
         }
     }
 }

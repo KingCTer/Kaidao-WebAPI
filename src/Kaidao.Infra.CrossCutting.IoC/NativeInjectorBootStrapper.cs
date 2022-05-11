@@ -1,5 +1,6 @@
 ﻿using Kaidao.Application.AppServices;
 using Kaidao.Application.AppServices.Interfaces;
+using Kaidao.Application.Services;
 using Kaidao.Domain.CommandHandlers;
 using Kaidao.Domain.Commands.Author;
 using Kaidao.Domain.Commands.Book;
@@ -12,6 +13,7 @@ using Kaidao.Domain.Interfaces;
 using Kaidao.Infra.CrossCutting.Bus;
 using Kaidao.Infra.CrossCutting.Identity.Models;
 using Kaidao.Infra.CrossCutting.Identity.Repository;
+using Kaidao.Infra.Data.Context;
 using Kaidao.Infra.Data.EventSourcing;
 using Kaidao.Infra.Data.Repository;
 using Kaidao.Infra.Data.Repository.EventSourcing;
@@ -38,6 +40,8 @@ public class NativeInjectorBootStrapper
         services.AddScoped<IChapterAppService, ChapterAppService>();
         services.AddScoped<ICategoryAppService, CategoryAppService>();
 
+        services.AddScoped<IStorageService, FileStorageService>();
+
         // Domain - Events
         services.AddScoped<INotificationHandler<DomainNotification>, DomainNotificationHandler>();
 
@@ -52,6 +56,8 @@ public class NativeInjectorBootStrapper
         services.AddScoped<IRequestHandler<RegisterNewChapterCommand, bool>, ChapterCommandHandler>();
 
         // Infra - Data
+        services.AddScoped<AppDbContext>();
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IPermissionRepository, PermissionRepository>();
@@ -65,6 +71,7 @@ public class NativeInjectorBootStrapper
         // Infra - Data EventSourcing
         services.AddScoped<IEventStoreRepository, EventStoreSqlRepository>();
         services.AddScoped<IEventStore, SqlEventStore>();
+        services.AddScoped<EventStoreSqlContext>();
 
         // Infra - Identity
         services.AddScoped<IUser, AspNetUser>();

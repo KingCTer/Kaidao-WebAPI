@@ -1,4 +1,6 @@
-﻿using Kaidao.Application.Responses;
+﻿using FluentValidation.Results;
+using Kaidao.Application.Responses;
+using Kaidao.Application.ViewModels;
 
 namespace Kaidao.Application.AppServices.Interfaces
 {
@@ -11,5 +13,7 @@ namespace Kaidao.Application.AppServices.Interfaces
         public IEnumerable<BookResponse> GetAll();
 
         public RepositoryResponse<BookResponse> GetAll(int skip, int take, string query);
+
+        bool Create(BookCreateRequest bookCreateRequest);
     }
 }

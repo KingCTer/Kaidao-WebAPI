@@ -1,5 +1,6 @@
-﻿@using Kaidao.Application.Responses
-@model Kaidao.Web.Admin.ViewModels.BookCreateRequest
+﻿@using Kaidao.Application.ViewModels
+@using Kaidao.Application.Responses
+@model BookCreateRequest
 @{
     ViewData["Title"] = "Thêm truyện";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -191,7 +192,7 @@
 							<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change image">
 								<i class="bi bi-pencil-fill fs-7"></i>
 								<!--begin::Inputs-->
-								<input asp-for="ThumbnailImage" type="file" name="avatar" accept=".png, .jpg, .jpeg" />
+								<input asp-for="ThumbnailImage" type="file" accept=".png, .jpg, .jpeg" />
 								<!--end::Inputs-->
 							</label>
 							<!--end::Label-->
@@ -366,11 +367,11 @@
 				<!--end::Tab content-->
 				<div class="d-flex justify-content-end">
 					<!--begin::Button-->
-					<a href="../../demo1/dist/apps/ecommerce/catalog/products.html" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5">Cancel</a>
+					<a asp-action="Index" class="btn btn-light me-5">Trở về danh sách</a>
 					<!--end::Button-->
 					<!--begin::Button-->
-					<button type="submit" id="kt_ecommerce_add_product_submit" class="btn btn-primary">
-						<span class="indicator-label">Save Changes</span>
+					<button type="submit" class="btn btn-primary">
+						<span class="indicator-label">Thêm Truyện</span>
 						<span class="indicator-progress">Please wait...
 						<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
 					</button>

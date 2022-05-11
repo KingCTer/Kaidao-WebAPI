@@ -1,8 +1,9 @@
 ﻿using Kaidao.Application.Responses;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Kaidao.Web.Admin.ViewModels
+namespace Kaidao.Application.ViewModels
 {
     public class BookCreateRequest
     {
@@ -12,10 +13,10 @@ namespace Kaidao.Web.Admin.ViewModels
         public string Status { get; set; }
         public string Intro { get; set; }
         public string AuthorName { get; set; }
-        public string CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
         public List<CategoryResponse> CategoryList { get; set; }
 
-        public IFormFile ThumbnailImage { get; set; }   
+        public IFormFile ThumbnailImage { get; set; }
     }
 }
