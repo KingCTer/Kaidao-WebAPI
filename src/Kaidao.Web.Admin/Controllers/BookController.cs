@@ -2,6 +2,7 @@
 using Kaidao.Application.Common;
 using Kaidao.Application.Responses;
 using Kaidao.Application.ViewModels;
+using Kaidao.Web.Admin.ViewModels;
 using Kaidao.Web.Share.ApiClient.Interfaces;
 using Kaidao.Web.Share.Query;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,16 @@ namespace Kaidao.Web.Admin.Controllers
     public class BookController : BaseController
     {
         private readonly IBookAppService _bookAppService;
+        private readonly ICategoryAppService _categoryAppService;
 
-        public BookController(IBaseApiClient baseApiClient, IBookAppService bookAppService) : base(baseApiClient)
+        public BookController(
+            IBaseApiClient baseApiClient, 
+            IBookAppService bookAppService,
+            ICategoryAppService categoryAppService
+            ) : base(baseApiClient)
         {
             _bookAppService = bookAppService;
+            _categoryAppService = categoryAppService;
         }
 
         public IActionResult Index(PaginationFilter filter, string queryType = "")
@@ -38,6 +45,21 @@ namespace Kaidao.Web.Admin.Controllers
             ViewBag.Keyword = filter.Query;
 
             return View(pagedResult);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            var viewModel = new BookCreateRequest();
+            viewModel.CategoryList = _categoryAppService.GetAll().ToList();
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] BookCreateRequest request)
+        {
+            return View(request);
         }
     }
 }

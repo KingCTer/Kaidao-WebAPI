@@ -16,6 +16,9 @@ namespace Kaidao.Application.AutoMapper
 
             CreateMap<Chapter, ChapterResponse>()
                 .ConstructUsing(c => new ChapterResponse(c.Id, c.BookId, c.Order, c.Name, c.Url, c.Content));
+
+            CreateMap<Category, CategoryResponse>()
+                .ConstructUsing(c => new CategoryResponse(c.Id, c.Name));
         }
     }
 }

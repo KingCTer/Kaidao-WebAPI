@@ -36,6 +36,7 @@ public class NativeInjectorBootStrapper
         services.AddScoped<IUserAppService, UserAppService>();
         services.AddScoped<IBookAppService, BookAppService>();
         services.AddScoped<IChapterAppService, ChapterAppService>();
+        services.AddScoped<ICategoryAppService, CategoryAppService>();
 
         // Domain - Events
         services.AddScoped<INotificationHandler<DomainNotification>, DomainNotificationHandler>();
