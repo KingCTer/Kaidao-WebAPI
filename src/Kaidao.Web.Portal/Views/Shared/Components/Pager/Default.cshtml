@@ -1,0 +1,124 @@
+﻿@model Kaidao.Application.Common.PagedResultBase;
+@{
+    var urlTemplate = Url.Action() + "?pageIndex={0}";
+    var request = ViewContext.HttpContext.Request;
+    foreach (var key in request.Query.Keys)
+    {
+        if (key == "pageIndex")
+        {
+            continue;
+        }
+        if (request.Query[key].Count > 1)
+        {
+            foreach (var item in (string[])request.Query[key])
+            {
+                urlTemplate += "&" + key + "=" + item;
+            }
+        }
+        else
+        {
+            urlTemplate += "&" + key + "=" + request.Query[key];
+        }
+    }
+
+    var startIndex = Math.Max(Model.PageIndex - 2, 1);
+    var finishIndex = Math.Min(Model.PageIndex + 2, Model.PageCount);
+
+    if (Model.PageIndex <= 2)
+    {
+        finishIndex = Math.Min(5, Model.PageCount);
+    }
+    if (Model.PageIndex >= Model.PageCount - 2)
+    {
+        startIndex = Math.Max(Model.PageCount - 4, 1);
+    }
+
+}
+
+<!--begin::Pagination-->
+@if (Model.PageCount > 1)
+{
+    <div class="datatable-pager datatable-paging-loaded">
+        <ul class="datatable-pager-nav my-2 mb-sm-0">
+
+            @if (Model.PageIndex == 1)
+            {
+                <li>
+                    <a title="Đầu tiên" class="datatable-pager-link datatable-pager-link-first datatable-pager-link-disabled" disabled="disabled">
+                        <i class="flaticon2-fast-back"></i>
+                    </a>
+                </li>
+                <li>
+                    <a title="Trước" class="datatable-pager-link datatable-pager-link-prev datatable-pager-link-disabled" disabled="disabled">
+                        <i class="flaticon2-back"></i>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a title="Đầu tiên" href="@urlTemplate.Replace("{0}", "1")" class="datatable-pager-link datatable-pager-link-first" data-page="1">
+                        <i class="flaticon2-fast-back"></i>
+                    </a>
+                </li>
+                <li>
+                    <a title="Trước" href="@urlTemplate.Replace("{0}", (Model.PageIndex-1).ToString())" class="datatable-pager-link datatable-pager-link-prev" data-page="1">
+                        <i class="flaticon2-back"></i>
+                    </a>
+                </li>
+
+            }
+
+            @if (startIndex > 1)
+            {
+                <li><a class="datatable-pager-link datatable-pager-link-number" title="...">...</a></li>
+            }
+
+            @for (var index = startIndex; index <= finishIndex; index++)
+            {
+                if (index == Model.PageIndex)
+                {
+                    <li><a class="datatable-pager-link datatable-pager-link-number datatable-pager-link-active" title="Trang @index">@index</a></li>
+                }
+                else
+                {
+                    <li><a href="@urlTemplate.Replace("{0}", index.ToString())" class="datatable-pager-link datatable-pager-link-number" title="Trang @index">@index</a></li>
+                }
+            }
+
+            @if (finishIndex < Model.PageCount)
+            {
+                <li><a class="datatable-pager-link datatable-pager-link-number" title="...">...</a></li>
+            }
+
+            @if (Model.PageIndex == Model.PageCount)
+            {
+                <li>
+                    <a title="Sau" class="datatable-pager-link datatable-pager-link-next datatable-pager-link-disabled" disabled="disabled">
+                        <i class="flaticon2-next"></i>
+                    </a>
+                </li>
+                <li>
+                    <a title="Sau cùng" class="datatable-pager-link datatable-pager-link-last datatable-pager-link-disabled" disabled="disabled">
+                        <i class="flaticon2-fast-next"></i>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a title="Next" href="@urlTemplate.Replace("{0}", (Model.PageIndex+1).ToString())" class="datatable-pager-link datatable-pager-link-next" data-page="2">
+                        <i class="flaticon2-next"></i>
+                    </a>
+                </li>
+                <li>
+                    <a title="Last" href="@urlTemplate.Replace("{0}", Model.PageCount.ToString())" class="datatable-pager-link datatable-pager-link-last" data-page="35">
+                        <i class="flaticon2-fast-next"></i>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+}
+<!--end:: Pagination-->
+

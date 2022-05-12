@@ -39,7 +39,7 @@
 									</form>
 									<!--end::Form-->
 								</div>
-								<div class="d-none d-md-flex flex-row-fluid bgi-no-repeat bgi-position-y-center bgi-position-x-left bgi-size-cover" style="background-image: url(assets/media/svg/illustrations/progress.svg);"></div>
+								<div class="d-none d-md-flex flex-row-fluid bgi-no-repeat bgi-position-y-center bgi-position-x-left bgi-size-cover" style="background-image: url(/assets/media/svg/illustrations/progress.svg);"></div>
 							</div>
 						</div>
 						<!--end::Engage Widget 15-->
@@ -82,13 +82,13 @@
 														<img src="@item.Cover" alt="@item.Name" class="mw-100 w-200px" />
 													</div>
 													<div class="overlay-layer">
-														<a href="#" class="btn font-weight-bolder btn-sm btn-primary mr-2">Đọc truyện</a>
+														<a href="@Url.ActionLink("Detail", "Book", new {bookId = item.Id})" class="btn font-weight-bolder btn-sm btn-primary mr-2">Đọc truyện</a>
 													</div>
 												</div>
 												<!--end::Image-->
 												<!--begin::Details-->
 												<div class="text-center mt-5 mb-md-0 mb-lg-5 mb-md-0 mb-lg-5 mb-lg-0 mb-5 d-flex flex-column">
-													<a href="#" class="font-size-h5 font-weight-bolder text-dark-75 text-hover-primary mb-1">@bookName</a>
+													<a href="@Url.ActionLink("Detail", "Book", new {bookId = item.Id})" class="font-size-h5 font-weight-bolder text-dark-75 text-hover-primary mb-1">@bookName</a>
 													<span class="font-size-lg">@item.AuthorName</span>
 												</div>
 												<!--end::Details-->
