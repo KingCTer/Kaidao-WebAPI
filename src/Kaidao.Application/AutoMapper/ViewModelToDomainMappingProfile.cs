@@ -1,4 +1,5 @@
 using AutoMapper;
+using Kaidao.Application.Responses;
 using Kaidao.Application.ViewModels;
 using Kaidao.Domain.Commands.Author;
 using Kaidao.Domain.Commands.Book;
@@ -24,6 +25,9 @@ namespace Kaidao.Application.AutoMapper
 
             CreateMap<ChapterViewModel, RegisterNewChapterCommand>()
                 .ConstructUsing(c => new RegisterNewChapterCommand(c.BookId, c.Order, c.Name, c.Url, c.Content));
+
+            CreateMap<ChapterResponse, UpdateChapterCommand>()
+               .ConstructUsing(c => new UpdateChapterCommand(c.Id, c.Order, c.Name, c.Url, c.Content, c.BookId));
         }
     }
 }

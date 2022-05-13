@@ -13,5 +13,7 @@ namespace Kaidao.Application.AppServices.Interfaces
         public IEnumerable<ChapterResponse> GetChapterListByBookId(Guid bookId);
 
         public RepositoryResponse<ChapterResponse> GetChapterListByBookId(Guid bookId, int skip, int take, string query);
+
+        public string CrawlContent(ChapterResponse chapterResponse);
     }
 }

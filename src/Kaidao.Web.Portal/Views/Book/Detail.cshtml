@@ -62,7 +62,7 @@
 								<div class="font-size-h4 line-height-xl mt-5">@Html.Raw(@Model.CurrentBook.Intro)</div>
 								<!--begin::Buttons-->
 								<div class="d-flex">
-									<button type="button" class="btn btn-primary font-weight-bolder mr-6 px-6 font-size-sm">
+									<a href="@Url.ActionLink("Index", "Chapter", new {bookId = Model.CurrentBook.Id,chapterOrder = 1})" type="button" class="btn btn-primary font-weight-bolder mr-6 px-6 font-size-sm">
 									<span class="svg-icon">
 										<!--begin::Svg Icon | path:assets/media/svg/icons/Files/File-plus.svg-->
 										<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -73,7 +73,7 @@
 											</g>
 										</svg>
 										<!--end::Svg Icon-->
-									</span>Đọc Truyện</button>
+									</span>Đọc Truyện</a>
 									<button type="button" class="btn btn-light-primary font-weight-bolder px-8 font-size-sm">
 									<span class="svg-icon">
 										<!--begin::Svg Icon | path:assets/media/svg/icons/Files/File-done.svg-->
@@ -240,12 +240,17 @@
 									<tbody>
 										@foreach (var chapter in Model.ChapterPagedResult.Items)
 										{
+											var chapterUrl = @Url.ActionLink("Index", "Chapter", new {
+												bookId = chapter.BookId, 
+												chapterId = chapter.Id,
+												chapterOrder = chapter.Order
+											});
 											<tr>
 												<td class="pl-0">
-													<a href="#" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg">@chapter.Order</a>
+													<a href="@chapterUrl" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg">@chapter.Order</a>
 												</td>
 												<td>
-													<a href="#" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg">@chapter.Name</a>
+													<a href="@chapterUrl" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg">@chapter.Name</a>
 												</td>
 												<td class="pr-0 text-right">
 													<a href="#" class="btn btn-icon btn-light btn-hover-primary btn-sm">
