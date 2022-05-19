@@ -96,7 +96,11 @@
 									<span class="text-muted font-weight-bold font-size-sm">@Model.CategoryBooks.ViewModel.Count() of @Model.CategoryBooks.TotalRecords Total Items</span>
 								</h3>
 								<div class="card-toolbar">
-									<a href="#" class="btn btn-light-info btn-sm font-weight-bolder font-size-sm py-3 px-6">Xem Thêm</a>
+									@{
+										var categoryName = Model.CurrentBook.CategoryName;
+										var queryCategory = "where:categoryName=" + categoryName;
+									}
+									<a href="@Url.ActionLink("List", "Book", new {query = queryCategory })" class="btn btn-light-info btn-sm font-weight-bolder font-size-sm py-3 px-6">Xem Thêm</a>
 								</div>
 							</div>
 							<!--end::Header-->
@@ -156,7 +160,11 @@
 									<span class="text-muted font-weight-bold font-size-sm">@Model.AuthorBooks.ViewModel.Count() of @Model.AuthorBooks.TotalRecords Total Items</span>
 								</h3>
 								<div class="card-toolbar">
-									<a href="#" class="btn btn-light-info btn-sm font-weight-bolder font-size-sm py-3 px-6">Xem Thêm</a>
+									@{
+										var authorName = Model.CurrentBook.AuthorName;
+										var queryAuthor = "where:authorName=" + authorName;
+									}
+									<a href="@Url.ActionLink("List", "Book", new {query = queryAuthor })" class="btn btn-light-info btn-sm font-weight-bolder font-size-sm py-3 px-6">Xem Thêm</a>
 								</div>
 							</div>
 							<!--end::Header-->

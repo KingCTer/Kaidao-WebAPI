@@ -10,7 +10,7 @@
 	<!--begin::Container-->
 	<div class="container">
 		<!--begin::Page Layout-->
-		<div class="d-flex flex-row">
+		<div class="d-flex flex-row mt-10">
 			<!--begin::Layout-->
 			<div class="flex-row-fluid ml-lg-8">
 				<!--begin::Card-->
@@ -20,10 +20,10 @@
 						<div class="card card-custom mb-12">
 							<div class="card-body rounded p-0 d-flex" style="background-color:#DAF0FD;">
 								<div class="d-flex flex-column flex-lg-row-auto w-auto w-lg-350px w-xl-450px w-xxl-500px p-10 p-md-20">
-									<h1 class="font-weight-bolder text-dark">Search Goods</h1>
-									<div class="font-size-h4 mb-8">Get Amazing Gadgets</div>
+									<h1 class="font-weight-bolder text-dark">Tìm Kiếm Truyện</h1>
+									<div class="font-size-h4 mb-8">Tên truyện, tên tác giả, ...</div>
 									<!--begin::Form-->
-									<form class="d-flex flex-center py-2 px-6 bg-white rounded">
+									<form asp-action="List" asp-controller="Book" method="get" class="d-flex flex-center py-2 px-6 bg-white rounded">
 										<span class="svg-icon svg-icon-lg svg-icon-primary">
 											<!--begin::Svg Icon | path:assets/media/svg/icons/General/Search.svg-->
 											<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -35,11 +35,11 @@
 											</svg>
 											<!--end::Svg Icon-->
 										</span>
-										<input type="text" class="form-control border-0 font-weight-bold pl-2" placeholder="Search Goods" />
+										<input name="keyword" type="text" class="form-control border-0 font-weight-bold pl-2" placeholder="Tìm kiếm ..." />
 									</form>
 									<!--end::Form-->
 								</div>
-								<div class="d-none d-md-flex flex-row-fluid bgi-no-repeat bgi-position-y-center bgi-position-x-left bgi-size-cover" style="background-image: url(/assets/media/svg/illustrations/progress.svg);"></div>
+								<div class="d-none d-md-flex flex-row-fluid bgi-no-repeat bgi-position-y-center bgi-position-x-left bgi-size-cover" style="background-image: url(https://audiotruyenfull.com/wp-content/uploads/2020/02/De-Ton.jpg);"></div>
 							</div>
 						</div>
 						<!--end::Engage Widget 15-->
@@ -48,7 +48,7 @@
 							<!--begin::Heading-->
 							<div class="d-flex justify-content-between align-items-center mb-7">
 								<h2 class="font-weight-bolder text-dark font-size-h3 mb-0">Truyện mới cập nhật</h2>
-								<a href="#" class="btn btn-light-primary btn-sm font-weight-bolder">Xem Thêm</a>
+								<a href="@Url.ActionLink("List", "Book", new {query = "orderBy:key:desc"})" class="btn btn-light-primary btn-sm font-weight-bolder">Xem Thêm</a>
 							</div>
 							<!--end::Heading-->
 							<!--begin::Products-->
@@ -109,7 +109,7 @@
 							<!--begin::Heading-->
 							<div class="d-flex justify-content-between align-items-center mb-7">
 								<h2 class="font-weight-bolder text-dark font-size-h3 mb-0">Truyện được yêu thích</h2>
-								<a href="#" class="btn btn-light-primary btn-sm font-weight-bolder">Xem Thêm</a>
+								<a href="@Url.ActionLink("List", "Book", new {query = "orderBy:like:desc"})" class="btn btn-light-primary btn-sm font-weight-bolder">Xem Thêm</a>
 							</div>
 							<!--end::Heading-->
 							<!--begin::Products-->
@@ -170,12 +170,12 @@
 							<!--begin::Heading-->
 							<div class="d-flex justify-content-between align-items-center mb-7">
 								<h2 class="font-weight-bolder text-dark font-size-h3 mb-0">Truyện phổ biến</h2>
-								<a href="#" class="btn btn-light-primary btn-sm font-weight-bolder">Xem Thêm</a>
+								<a href="@Url.ActionLink("List", "Book", new {query = "orderBy:view:desc"})" class="btn btn-light-primary btn-sm font-weight-bolder">Xem Thêm</a>
 							</div>
 							<!--end::Heading-->
 							<!--begin::Products-->
 							<div class="row">
-								@foreach (var item in Model.FavoriteBooks.ViewModel)
+								@foreach (var item in Model.PopularBook.ViewModel)
 								{
 									var bookName = @item.Name;
 									if (bookName.Contains("-"))

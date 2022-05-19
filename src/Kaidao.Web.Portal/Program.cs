@@ -25,7 +25,7 @@ builder.Services.AddAuthentication(options =>
 })
     .AddCookie("Cookies", options =>
     {
-        //options.AccessDeniedPath = "/AccessDenied";
+        options.AccessDeniedPath = "/AccessDenied";
     })
     .AddOpenIdConnect("oidc", options =>
     {
@@ -108,10 +108,10 @@ app.UseEndpoints(endpoints =>
     //endpoints.MapDefaultControllerRoute()
     //    .RequireAuthorization();
 
-    //endpoints.MapControllerRoute(
-    //    name: "AccessDenied",
-    //    pattern: "/AccessDenied",
-    //    new { controller = "Access", action = "AccessDenied" });
+    endpoints.MapControllerRoute(
+        name: "AccessDenied",
+        pattern: "/AccessDenied",
+        new { controller = "Access", action = "AccessDenied" });
 
     endpoints.MapControllerRoute(
         name: "default",

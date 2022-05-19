@@ -2,6 +2,7 @@
 using Kaidao.Application.Common;
 using Kaidao.Application.Responses;
 using Kaidao.Web.Portal.ViewModels;
+using Kaidao.Web.Share.Query;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kaidao.Web.Portal.Controllers
@@ -48,6 +49,31 @@ namespace Kaidao.Web.Portal.Controllers
             };
 
             return View(viewModel);
+        }
+
+        public IActionResult List(PaginationFilter filter, string keyword)
+        {
+            filter.PageSize = 24;
+
+            var query = filter.Query;
+            if (keyword != null)
+            {
+                query += ";where:keyword=" + keyword;
+            }
+
+            var data = _bookAppService.GetAll((filter.PageNumber - 1) * filter.PageSize, filter.PageSize, query);
+
+            var pagedResult = new PagedResult<BookResponse>()
+            {
+                TotalRecords = data.TotalRecords,
+                Items = data.ViewModel.ToList(),
+                PageSize = filter.PageSize,
+                PageIndex = filter.PageNumber
+            };
+
+            ViewBag.Keyword = keyword;
+
+            return View(pagedResult);
         }
     }
 }

@@ -1,0 +1,91 @@
+﻿@using Kaidao.Application.Common
+@using Kaidao.Application.Responses
+@model PagedResult<BookResponse>
+@{
+    ViewData["Title"] = "Danh sách";
+}
+
+
+<!--begin::Entry-->
+<div class="d-flex flex-column-fluid">
+	<!--begin::Container-->
+	<div class="container">
+		<!--begin::Page Layout-->
+		<div class="d-flex flex-row mt-10">
+			<!--begin::Layout-->
+			<div class="flex-row-fluid ml-lg-8">
+				<!--begin::Card-->
+				<div class="card card-custom card-stretch gutter-b">
+					<div class="card-body">
+						<!--begin::Section-->
+						<div class="mb-11">
+							<!--begin::Heading-->
+							<div class="d-flex justify-content-between align-items-center mb-7">
+								<h2 class="font-weight-bolder text-dark font-size-h3 mb-0">Danh sách</h2>
+							</div>
+							<!--end::Heading-->
+							<!--begin::Products-->
+							<div class="row">
+								@foreach (var item in Model.Items)
+								{
+									var bookName = @item.Name;
+									if (bookName.Contains("-"))
+									{
+										bookName = bookName.Split("-")[0];
+
+									}
+									if (bookName.Contains("("))
+									{
+										bookName = bookName.Split("(")[0];
+									}
+									if(bookName.Length > 40)
+									{
+										bookName.Substring(0, 40);
+										bookName = bookName + "...";
+									}
+									
+									<!--begin::Product-->
+									<div class="col-md-2 col-xxl-2 col-lg-3">
+										<!--begin::Card-->
+										<div class="card card-custom card-shadowless">
+											<div class="card-body p-0">
+												<!--begin::Image-->
+												<div class="overlay">
+													<div class="overlay-wrapper rounded bg-light text-center">
+														<img src="@item.Cover" alt="@item.Name" class="mw-100 w-200px" />
+													</div>
+													<div class="overlay-layer">
+														<a href="@Url.ActionLink("Detail", "Book", new {bookId = item.Id})" class="btn font-weight-bolder btn-sm btn-primary mr-2">Đọc truyện</a>
+													</div>
+												</div>
+												<!--end::Image-->
+												<!--begin::Details-->
+												<div class="text-center mt-5 mb-md-0 mb-lg-5 mb-md-0 mb-lg-5 mb-lg-0 mb-5 d-flex flex-column">
+													<a href="@Url.ActionLink("Detail", "Book", new {bookId = item.Id})" class="font-size-h5 font-weight-bolder text-dark-75 text-hover-primary mb-1">@bookName</a>
+													<span class="font-size-lg">@item.AuthorName</span>
+												</div>
+												<!--end::Details-->
+											</div>
+										</div>
+										<!--end::Card-->
+									</div>
+									<!--end::Product-->
+								}
+							</div>
+							<!--end::Products-->
+							<div class="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded">
+                                @await Component.InvokeAsync("Pager", Model)
+                            </div>
+						</div>
+						<!--end::Section-->
+					</div>
+				</div>
+				<!--end::Card-->
+			</div>
+			<!--end::Layout-->
+		</div>
+		<!--end::Page Layout-->
+	</div>
+	<!--end::Container-->
+</div>
+<!--end::Entry-->

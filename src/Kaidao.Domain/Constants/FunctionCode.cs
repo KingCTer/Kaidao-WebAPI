@@ -2,6 +2,7 @@
 {
     public enum FunctionCode
     {
-        SYSTEM
+        SYSTEM,
+        CHAPTER
     }
 }
