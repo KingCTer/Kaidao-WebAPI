@@ -41,6 +41,12 @@ namespace Kaidao.Web.Portal.Controllers
             });
         }
 
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return SignOut("oidc");
+        }
+
         public IActionResult Privacy()
         {
             return View();

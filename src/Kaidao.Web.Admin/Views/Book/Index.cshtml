@@ -13,7 +13,7 @@
 		<!--begin::Page title-->
 		<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
 			<!--begin::Title-->
-			<h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Products</h1>
+			<h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Danh Sách Truyện</h1>
 			<!--end::Title-->
 			<!--begin::Separator-->
 			<span class="h-20px border-gray-300 border-start mx-4"></span>
@@ -22,7 +22,7 @@
 			<ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
 				<!--begin::Item-->
 				<li class="breadcrumb-item text-muted">
-					<a href="../../demo1/dist/index.html" class="text-muted text-hover-primary">Home</a>
+					<a asp-controller="Home" asp-action="Index" class="text-muted text-hover-primary">Trang Chủ</a>
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->
@@ -31,7 +31,7 @@
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->
-				<li class="breadcrumb-item text-muted">eCommerce</li>
+				<li class="breadcrumb-item text-muted">Quản lý truyện</li>
 				<!--end::Item-->
 				<!--begin::Item-->
 				<li class="breadcrumb-item">
@@ -39,7 +39,7 @@
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->
-				<li class="breadcrumb-item text-muted">Catalog</li>
+				<li class="breadcrumb-item text-muted">Truyện</li>
 				<!--end::Item-->
 				<!--begin::Item-->
 				<li class="breadcrumb-item">
@@ -47,7 +47,7 @@
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->
-				<li class="breadcrumb-item text-dark">Products</li>
+				<li class="breadcrumb-item text-dark">Danh sách truyện</li>
 				<!--end::Item-->
 			</ul>
 			<!--end::Breadcrumb-->
@@ -187,17 +187,6 @@
 				<h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">@Model.TotalRecords Total Records</h1>
 				<!--begin::Card toolbar-->
 				<div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-					<div class="w-100 mw-150px">
-						<!--begin::Select2-->
-						<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Status" data-kt-ecommerce-product-filter="status">
-							<option></option>
-							<option value="all">All</option>
-							<option value="published">Published</option>
-							<option value="scheduled">Scheduled</option>
-							<option value="inactive">Inactive</option>
-						</select>
-						<!--end::Select2-->
-					</div>
 					<!--begin::Add product-->
 					<a aasp-controller="Book" asp-action="Create" class="btn btn-primary">Thêm truyện</a>
 					<!--end::Add product-->
