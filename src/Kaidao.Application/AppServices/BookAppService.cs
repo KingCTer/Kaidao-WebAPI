@@ -246,5 +246,17 @@ namespace Kaidao.Application.AppServices
             
             return Bus.SendCommand(registerCommand).IsCompleted;
         }
+
+        public bool Update(BookViewModel bookViewModel)
+        {
+            var updateCommand = _mapper.Map<UpdateBookCommand>(bookViewModel);
+            return Bus.SendCommand(updateCommand).IsCompleted;
+        }
+
+        public bool Remove(Guid id)
+        {
+            var removeCommand = new RemoveBookCommand(id);
+            return Bus.SendCommand(removeCommand).IsCompleted;
+        }
     }
 }

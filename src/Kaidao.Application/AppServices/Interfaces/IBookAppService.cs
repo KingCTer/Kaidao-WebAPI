@@ -15,5 +15,9 @@ namespace Kaidao.Application.AppServices.Interfaces
         public RepositoryResponse<BookResponse> GetAll(int skip, int take, string query);
 
         bool Create(BookCreateRequest bookCreateRequest);
+
+        bool Update(BookViewModel bookViewModel);
+
+        bool Remove(Guid id);
     }
 }

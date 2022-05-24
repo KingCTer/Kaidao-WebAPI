@@ -72,5 +72,13 @@ namespace Kaidao.Web.Admin.Controllers
             return View(request);
 
         }
+
+        [HttpPost]
+        public IActionResult Delete(Guid id)
+        {
+            _bookAppService.Remove(id);
+
+            return RedirectToAction("Index");
+        }
     }
 }

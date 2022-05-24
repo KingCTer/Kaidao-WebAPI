@@ -52,6 +52,7 @@ public class NativeInjectorBootStrapper
 
         services.AddScoped<IRequestHandler<RegisterNewBookCommand, bool>, BookCommandHandler>();
         services.AddScoped<IRequestHandler<UpdateBookCommand, bool>, BookCommandHandler>();
+        services.AddScoped<IRequestHandler<RemoveBookCommand, bool>, BookCommandHandler>();
 
         services.AddScoped<IRequestHandler<RegisterNewChapterCommand, bool>, ChapterCommandHandler>();
         services.AddScoped<IRequestHandler<UpdateChapterCommand, bool>, ChapterCommandHandler>();

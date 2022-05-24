@@ -9,7 +9,8 @@ namespace Kaidao.Domain.CommandHandlers
 {
     public class BookCommandHandler : CommandHandler,
         IRequestHandler<RegisterNewBookCommand, bool>,
-        IRequestHandler<UpdateBookCommand, bool>
+        IRequestHandler<UpdateBookCommand, bool>,
+        IRequestHandler<RemoveBookCommand, bool>
     {
         private readonly IBookRepository _bookRepository;
         private readonly IMediatorHandler Bus;
@@ -127,6 +128,24 @@ namespace Kaidao.Domain.CommandHandlers
         public void Dispose()
         {
             _bookRepository.Dispose();
+        }
+
+        public Task<bool> Handle(RemoveBookCommand message, CancellationToken cancellationToken)
+        {
+            if (!message.IsValid())
+            {
+                NotifyValidationErrors(message);
+                return Task.FromResult(false);
+            }
+
+            _bookRepository.Remove(message.Id);
+
+            if (Commit())
+            {
+                //Bus.RaiseEvent(new CustomerRemovedEvent(message.Id));
+            }
+
+            return Task.FromResult(true);
         }
     }
 }
