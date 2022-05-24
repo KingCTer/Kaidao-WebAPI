@@ -29,18 +29,18 @@ namespace Kaidao.Web.Portal.Controllers
 		public IActionResult Index(Guid bookId, Guid chapterId, int chapterOrder = 1)
         {
 			var chapterResponse = new ChapterResponse();
-			if (chapterId == Guid.Empty)
-			{
-				chapterResponse = _chapterAppService.GetChapterByBookIdAndOrder(bookId, chapterOrder);
-			}
-			else if (bookId == Guid.Empty)
-			{
-				return View(chapterResponse);
-			} 
-			else
-			{
+            if (chapterId != Guid.Empty)
+            {
 				chapterResponse = _chapterAppService.GetChapterById(chapterId);
+            }
+            else if (bookId != Guid.Empty)
+            {
+				chapterResponse = _chapterAppService.GetChapterByBookIdAndOrder(bookId, chapterOrder);
+			} else
+            {
+				return View(chapterResponse);
 			}
+
 
 			if (chapterResponse == null)
 			{

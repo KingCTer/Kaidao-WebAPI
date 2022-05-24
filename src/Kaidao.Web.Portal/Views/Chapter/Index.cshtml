@@ -120,7 +120,10 @@
 					
 			<div class="card-body mt-10">
 				<!--begin::Example-->
-				<p class="font-size-h1">@Html.Raw(Model.Content.Replace(Environment.NewLine, "<br />"))</p>
+				@if (!String.IsNullOrEmpty(Model.Content))
+				{
+					<p class="font-size-h1">@Html.Raw(Model.Content.Replace(Environment.NewLine, "<br />"))</p>
+				}
 				<!--end::Example-->
 			</div>
 		</div>

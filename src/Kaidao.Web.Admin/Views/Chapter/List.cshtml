@@ -1,9 +1,8 @@
-﻿@using Kaidao.Application.Common
-@model PagedResult<Kaidao.Application.Responses.BookResponse>
-
+﻿@using Kaidao.Web.Admin.ViewModels
+@model ChapterListViewModel
 @{
-    ViewData["Title"] = "Danh sách truyện";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Danh sách chương";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!--begin::Toolbar-->
@@ -31,7 +30,7 @@
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->
-				<li class="breadcrumb-item text-muted">Quản lý truyện</li>
+				<li class="breadcrumb-item text-muted">Chương truyện</li>
 				<!--end::Item-->
 				<!--begin::Item-->
 				<li class="breadcrumb-item">
@@ -39,7 +38,7 @@
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->
-				<li class="breadcrumb-item text-muted">Truyện</li>
+				<li class="breadcrumb-item text-muted">Danh sách chương</li>
 				<!--end::Item-->
 				<!--begin::Item-->
 				<li class="breadcrumb-item">
@@ -47,7 +46,9 @@
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->
-				<li class="breadcrumb-item text-dark">Danh sách truyện</li>
+				<li class="breadcrumb-item text-dark">
+					<a asp-controller="Book" asp-action="Edit" asp-route-id="@Model.BookId" >@Model.BookName</a>
+				</li>
 				<!--end::Item-->
 			</ul>
 			<!--end::Breadcrumb-->
@@ -176,53 +177,46 @@
 							</svg>
 						</span>
 						<!--end::Svg Icon-->
-						<form asp-action="Index" method="get">
-							<input type="hidden" name="queryType" value="where:keyword=">
-							<input name="query" value="@ViewBag.Keyword" type="text" class="form-control form-control-solid w-250px ps-14" placeholder="Tìm kiếm..." />
+						<form asp-action="List" method="get">
+							<input name="bookId" type="hidden" value="@Model.BookId" />
+							<input name="bookName" type="hidden" value="@Model.BookName" />
+							<input name="keyword" value="@ViewBag.Keyword" type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Tìm kiếm..." />
 						</form>
 					</div>
 					<!--end::Search-->
 				</div>
 				<!--end::Card title-->
-				<h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">@Model.TotalRecords Total Records</h1>
-				<!--begin::Card toolbar-->
-				<div class="card-toolbar flex-row-fluid justify-content-end gap-5">
-					<!--begin::Add product-->
-					<a aasp-controller="Book" asp-action="Create" class="btn btn-primary">Thêm truyện</a>
-					<!--end::Add product-->
-				</div>
-				<!--end::Card toolbar-->
 			</div>
 			<!--end::Card header-->
 			<!--begin::Card body-->
 			<div class="card-body pt-0">
-				<div class="dataTables_wrapper dt-bootstrap4 no-footer">
-					<!--begin::Table-->
-					<table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_products_table">
+				<!--begin::Table-->
+				<table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_sales_table">
 					<!--begin::Table head-->
 					<thead>
 						<!--begin::Table row-->
 						<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
 							<th class="w-10px pe-2">
 								<div class="form-check form-check-sm form-check-custom form-check-solid me-3">
-									<input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_ecommerce_products_table .form-check-input" value="1" />
+									<input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_ecommerce_sales_table .form-check-input" value="1" />
 								</div>
 							</th>
-							<th class="min-w-200px">Truyện</th>
-							<th class="text-center min-w-100px">Trạng thái</th>
-							<th class="text-center min-w-70px">Chương</th>
-							<th class="text-center min-w-200px">Thể loại</th>
-							<th class="text-center min-w-100px">Tác giả</th>
-							<th class="text-end min-w-100px">Lượt xem</th>
-							<th class="text-end min-w-150px">Action</th>
+							<th class="min-w-80px">Order ID</th>
+							<th class="min-w-200px">Tên Chương</th>
+							<th class="text-center min-w-70px">Trạng thái</th>
+							<th class="text-center min-w-60px">Source</th>
+							<th class="text-end min-w-100px">Date Added</th>
+							<th class="text-end min-w-100px">Date Modified</th>
+							<th class="text-end min-w-100px">Actions</th>
 						</tr>
 						<!--end::Table row-->
 					</thead>
 					<!--end::Table head-->
 					<!--begin::Table body-->
 					<tbody class="fw-bold text-gray-600">
-
-						@foreach (var item in Model.Items){
+						@foreach (var chapter in Model.ChapterPagedResult.Items)
+						{
+							var chapterUrl = ViewBag.PortalAddress + "/Chapter?chapterId=" + chapter.Id;
 							<!--begin::Table row-->
 							<tr>
 								<!--begin::Checkbox-->
@@ -232,52 +226,57 @@
 									</div>
 								</td>
 								<!--end::Checkbox-->
-								<!--begin::Category=-->
+								<!--begin::Order ID=-->
+								<td>
+									<a href="@chapterUrl" class="text-gray-800 text-hover-primary fw-bolder">@chapter.Order</a>
+								</td>
+								<!--end::Order ID=-->
+								<!--begin::Customer=-->
 								<td>
 									<div class="d-flex align-items-center">
-										@{
-											var bookUrl = ViewBag.PortalAddress + "/Book/Detail?bookId=" + item.Id;
-										}
-										<!--begin::Thumbnail-->
-										<a href="@bookUrl" class="symbol symbol-50px">
-											<span class="symbol-label" style="background-image:url(@item.Cover);width: 90px;height: 120px;"></span>
-										</a>
-										<!--end::Thumbnail-->
-										<div class="ms-5">
+										<div>
 											<!--begin::Title-->
-											<a href="@bookUrl" class="text-gray-800 text-hover-primary fs-5 fw-bolder" data-kt-ecommerce-product-filter="product_name">@item.Name</a>
+											<a href="@chapterUrl" class="text-gray-800 text-hover-primary fs-5 fw-bolder">@chapter.Name</a>
 											<!--end::Title-->
 										</div>
 									</div>
 								</td>
-								<!--end::Category=-->
-								<!--begin::SKU=-->
-								<td class="text-center pe-0">
-									<span class="fw-bolder">@item.Status</span>
-								</td>
-								<!--end::SKU=-->
-								<!--begin::Qty=-->
-								<td class="text-center pe-0">
-									<span class="fw-bolder ms-3">@item.ChapterTotal</span>
-								</td>
-								<!--end::Qty=-->
-								<!--begin::Price=-->
-								<td class="text-center pe-0">
-									<span class="fw-bolder text-dark">@item.CategoryName</span>
-								</td>
-								<!--end::Price=-->
-								<!--begin::Rating-->
-								<td class="text-center pe-0">
-									<span class="fw-bolder ms-3">@item.AuthorName</span>
-								</td>
-								<!--end::Rating-->
+								<!--end::Customer=-->
 								<!--begin::Status=-->
-								<td class="text-end pe-0">
+								<td class="text-center pe-0">
 									<!--begin::Badges-->
-									<div class="badge badge-light-success">@item.View</div>
+									@if (String.IsNullOrEmpty(chapter.Content))
+									{
+										<div class="badge badge-light-danger">Not Added</div>
+									} else
+									{
+										<div class="badge badge-light-success">Added</div>
+									}
 									<!--end::Badges-->
 								</td>
 								<!--end::Status=-->
+								<!--begin::Total=-->
+								<td class="text-center pe-0">
+									@if (!String.IsNullOrEmpty(chapter.Url))
+									{
+										<a href="@chapter.Url" class="fw-bolder text-primary">Link</a>
+									} else
+									{
+										<span class="fw-bolder">Null</span>
+									}
+
+								</td>
+								<!--end::Total=-->
+								<!--begin::Date Added=-->
+								<td class="text-end">
+									<span class="fw-bolder">TODO</span>
+								</td>
+								<!--end::Date Added=-->
+								<!--begin::Date Modified=-->
+								<td class="text-end" >
+									<span class="fw-bolder">TODO</span>
+								</td>
+								<!--end::Date Modified=-->
 								<!--begin::Action=-->
 								<td class="text-end">
 									<a href="#" class="btn btn-sm btn-light btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
@@ -291,30 +290,18 @@
 									<!--begin::Menu-->
 									<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
 										<!--begin::Menu item-->
-										<div class="menu-item px-3 mt-5">
-											<form asp-action="List" asp-controller="Chapter" method="get">
-												<input name="bookId" type="hidden" value="@item.Id" />
-												<input name="bookName" type="hidden" value="@item.Name" />
-												<button type="submit" class="btn btn-primary">Chương</button>
-											</form>
+										<div class="menu-item px-3">
+											<a href="../../demo1/dist/apps/ecommerce/sales/details.html" class="menu-link px-3">View</a>
 										</div>
 										<!--end::Menu item-->
 										<!--begin::Menu item-->
-										<div class="menu-item px-3 mt-5">
-											<form asp-action="Edit" asp-controller="Book" method="get">
-												<input name="id" type="hidden" value="@item.Id" />
-												<button type="submit" class="btn btn-warning">Edit</button>
-											</form>
-											
+										<div class="menu-item px-3">
+											<a href="../../demo1/dist/apps/ecommerce/sales/edit-order.html" class="menu-link px-3">Edit</a>
 										</div>
 										<!--end::Menu item-->
 										<!--begin::Menu item-->
-										<div class="menu-item px-3 mt-5">
-											<form asp-action="Delete" asp-controller="Book" method="post" enctype="multipart/form-data">
-												<input name="id" type="hidden" value="@item.Id" />
-												<button type="submit" class="btn btn-danger">Xoá</button>
-											</form>
-											
+										<div class="menu-item px-3">
+											<a href="#" class="menu-link px-3" data-kt-ecommerce-order-filter="delete_row">Delete</a>
 										</div>
 										<!--end::Menu item-->
 									</div>
@@ -324,20 +311,20 @@
 							</tr>
 							<!--end::Table row-->
 						}
+						
 					</tbody>
 					<!--end::Table body-->
 				</table>
-					<!--end::Table-->
+				<!--end::Table-->
+				<div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
 					<div class="row">
 						<div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start"></div>
 						<div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
-							@await Component.InvokeAsync("Pager", Model)
+							@await Component.InvokeAsync("Pager", Model.ChapterPagedResult)
 						</div>
 					</div>
 				</div>
-				
 			</div>
-
 			<!--end::Card body-->
 		</div>
 		<!--end::Products-->

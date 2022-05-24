@@ -55,6 +55,16 @@ namespace Kaidao.Domain.Specifications
                                 }
                                 break;
 
+                            case "where:keyword":
+                                if (!string.IsNullOrEmpty(whereEqual[1]))
+                                {
+                                    AddWhere(x =>
+                                        x.Name.Contains(whereEqual[1])
+                                     || x.Url.Contains(whereEqual[1])
+                                    );
+                                }
+                                break;
+
                             default:
                                 break;
                         }

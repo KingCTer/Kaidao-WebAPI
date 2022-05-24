@@ -64,7 +64,8 @@ namespace Kaidao.Infra.Data.Repository
                 BookId = p.BookId,
                 Order = p.Order,
                 Name = p.Name,
-                Url = p.Url
+                Url = p.Url,
+                Content = p.Content
             });
 
             return specificationResponse;
