@@ -245,7 +245,7 @@
 										<!--end::Thumbnail-->
 										<div class="ms-5">
 											<!--begin::Title-->
-											<a href="@bookUrl" class="text-gray-800 text-hover-primary fs-5 fw-bolder" data-kt-ecommerce-product-filter="product_name">@item.Name</a>
+											<a asp-action="List" asp-controller="Chapter" asp-route-bookId="@item.Id" asp-route-bookName="@item.Name" class="text-gray-800 text-hover-primary fs-5 fw-bolder" data-kt-ecommerce-product-filter="product_name">@item.Name</a>
 											<!--end::Title-->
 										</div>
 									</div>

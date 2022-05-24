@@ -72,7 +72,8 @@ namespace Kaidao.Application.AppServices
             return "";
 		}
 
-		public void Dispose()
+
+        public void Dispose()
         {
             GC.SuppressFinalize(this);
         }
@@ -109,6 +110,22 @@ namespace Kaidao.Application.AppServices
             var chapter = _chapterRepository.GetLastChapterByBookId(bookId);
 
             return _mapper.Map<ChapterResponse>(chapter);
+        }
+
+        public bool Create(ChapterViewModel chapterViewModel)
+        {
+            var registerChapterCommand = _mapper.Map<RegisterNewChapterCommand>(chapterViewModel);
+            return Bus.SendCommand(registerChapterCommand).IsCompleted;
+        }
+
+        public bool Remove(Guid chapterId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(ChapterViewModel chapterViewModel)
+        {
+            throw new NotImplementedException();
         }
     }
 }
