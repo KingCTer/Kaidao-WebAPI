@@ -13,6 +13,11 @@ namespace Kaidao.Infra.Data.Repository
         {
         }
 
+        public override Chapter GetById(Guid id)
+        {
+            return DbSet.AsNoTracking().FirstOrDefault(c => c.Id == id);
+        }
+
         public Chapter GetChapterByBookIdAndOrder(Guid bookId, int order)
         {
             return DbSet.AsNoTracking().FirstOrDefault(c => c.BookId == bookId && c.Order == order);

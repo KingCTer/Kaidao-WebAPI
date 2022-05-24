@@ -16,5 +16,10 @@ namespace Kaidao.Infra.Data.Repository
         {
             return DbSet.AsNoTracking().FirstOrDefault(c => c.Key == key);
         }
+
+        public override Book GetById(Guid id)
+        {
+            return DbSet.AsNoTracking().FirstOrDefault(c => c.Id == id);
+        }
     }
 }

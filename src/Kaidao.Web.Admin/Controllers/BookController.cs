@@ -1,4 +1,5 @@
-﻿using Kaidao.Application.AppServices.Interfaces;
+﻿using AutoMapper;
+using Kaidao.Application.AppServices.Interfaces;
 using Kaidao.Application.Common;
 using Kaidao.Application.Responses;
 using Kaidao.Application.ViewModels;
@@ -10,15 +11,18 @@ namespace Kaidao.Web.Admin.Controllers
 {
     public class BookController : BaseController
     {
+        private readonly IConfiguration _configuration;
         private readonly IBookAppService _bookAppService;
         private readonly ICategoryAppService _categoryAppService;
 
         public BookController(
-            IBaseApiClient baseApiClient, 
+            IBaseApiClient baseApiClient,
+            IConfiguration configuration,
             IBookAppService bookAppService,
             ICategoryAppService categoryAppService
             ) : base(baseApiClient)
         {
+            _configuration = configuration;
             _bookAppService = bookAppService;
             _categoryAppService = categoryAppService;
         }
@@ -42,6 +46,7 @@ namespace Kaidao.Web.Admin.Controllers
             };
 
             ViewBag.Keyword = filter.Query;
+            ViewBag.PortalAddress = _configuration["PortalAddress"];
 
             return View(pagedResult);
         }
@@ -79,6 +84,33 @@ namespace Kaidao.Web.Admin.Controllers
             _bookAppService.Remove(id);
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Edit(Guid id)
+        {
+            var viewModel = new BookUpdateRequest();
+            viewModel.CategoryList = _categoryAppService.GetAll().ToList();
+            viewModel.Book = _bookAppService.GetById(id);
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public IActionResult Edit([FromForm] BookUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return RedirectToAction("Edit", new {id = request.Book.Id});
+
+            var result = _bookAppService.Update(request);
+            if (result)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("", "Cập nhật sản phẩm thất bại");
+            return View(request);
         }
     }
 }

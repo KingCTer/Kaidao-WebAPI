@@ -1,14 +1,9 @@
-﻿@using Kaidao.Application.ViewModels
-@using Kaidao.Application.Responses
-@model BookCreateRequest
-@{
-    ViewData["Title"] = "Thêm truyện";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+﻿@using Kaidao.Application.Responses
+@model Kaidao.Application.ViewModels.BookUpdateRequest
 
-@section PageScripts{
-	<script src="~/assets/js/widgets.bundle.js"></script>
-	<script src="~/assets/js/custom/widgets.js"></script>
+@{
+    ViewData["Title"] = "Chỉnh sửa truyện";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!--begin::Toolbar-->
@@ -18,7 +13,7 @@
 		<!--begin::Page title-->
 		<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
 			<!--begin::Title-->
-			<h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Thêm Truyện</h1>
+			<h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Chỉnh Sửa</h1>
 			<!--end::Title-->
 			<!--begin::Separator-->
 			<span class="h-20px border-gray-300 border-start mx-4"></span>
@@ -52,7 +47,7 @@
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->
-				<li class="breadcrumb-item text-dark">Thêm Truyện</li>
+				<li class="breadcrumb-item text-dark">Chỉnh sửa</li>
 				<!--end::Item-->
 			</ul>
 			<!--end::Breadcrumb-->
@@ -166,8 +161,14 @@
 	<!--begin::Container-->
 	<div id="kt_content_container" class="container-xxl">
 		<!--begin::Form-->
-		<form asp-action="Create" enctype="multipart/form-data" method="post" class="form d-flex flex-column flex-lg-row">
+		<form asp-action="Edit" enctype="multipart/form-data" method="post" class="form d-flex flex-column flex-lg-row">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input asp-for="Book.Id" type="hidden" value="@Model.Book.Id" />
+			<input asp-for="Book.Key" type="hidden" value="@Model.Book.Key" />
+			<input asp-for="Book.Like" type="hidden" value="@Model.Book.Like" />
+			<input asp-for="Book.View" type="hidden" value="@Model.Book.View" />
+			<input asp-for="Book.ChapterTotal" type="hidden" value="@Model.Book.ChapterTotal" />
+			<input asp-for="Book.Cover" type="hidden" value="@Model.Book.Cover" />
 			<!--begin::Aside column-->
 			<div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
 				<!--begin::Thumbnail settings-->
@@ -184,7 +185,15 @@
 					<!--begin::Card body-->
 					<div class="card-body text-center pt-0">
 						<!--begin::Image input-->
-						<div class="image-input image-input-empty image-input-outline mb-3" data-kt-image-input="true" style="background-image: url(assets/media/svg/files/blank-image.svg)">
+						@{
+							var cover = "";
+							if (Model.Book.Cover != null)
+							{
+								cover = Model.Book.Cover;
+							}
+							else cover = "assets/media/svg/files/blank-image.svg";
+						}
+						<div class="image-input image-input-empty image-input-outline mb-3" data-kt-image-input="true" style="background-image: url(@cover)">
 							<!--begin::Preview existing avatar-->
 							<div class="image-input-wrapper w-180px h-240px" style="width: 180px;height: 240px;"></div>
 							<!--end::Preview existing avatar-->
@@ -236,9 +245,25 @@
 						<!--begin::Select2-->
 						<select asp-for="Status" class="form-select mb-2" data-control="select2" data-hide-search="true" data-placeholder="Chọn trạng thái">
 							<option></option>
-							<option value="Đang ra" selected="selected">Đang ra</option>
-							<option value="Hoàn thành">Hoàn thành</option>
-							<option value="Tạm dừng">Tạm dừng</option>
+							@{
+								if (Model.Book.Status == "Đang ra")
+								{
+									<option value="Đang ra" selected="selected">Đang ra</option>
+									<option value="Hoàn thành">Hoàn thành</option>
+									<option value="Tạm dừng">Tạm dừng</option>
+								} else if (Model.Book.Status == "Hoàn thành") {
+									<option value="Đang ra">Đang ra</option>
+									<option value="Hoàn thành" selected="selected">Hoàn thành</option>
+									<option value="Tạm dừng">Tạm dừng</option>
+								} else
+								{
+									<option value="Đang ra">Đang ra</option>
+									<option value="Hoàn thành">Hoàn thành</option>
+									<option value="Tạm dừng" selected="selected">Tạm dừng</option>
+								};
+
+							}
+							
 						</select>
 						<!--end::Select2-->
 						<!--begin::Description-->
@@ -266,8 +291,12 @@
 						<label class="form-label">Thể loại</label>
 						<!--end::Label-->
 						<!--begin::Select2-->
+						@{
+							var CategoryId = Model.CategoryList.Find(item => item.Name == Model.Book.CategoryName).Id;
+						}
 						<select asp-for="CategoryId" asp-items="@((new SelectList(Model.CategoryList, nameof(CategoryResponse.Id), nameof(CategoryResponse.Name))))" class="form-select mb-2" data-control="select2" data-placeholder="Chọn thể loại">
 							<option></option>
+							<option value="@CategoryId" selected="selected">@Model.Book.CategoryName</option>
 						</select>
 						<!--end::Select2-->
 						<!--begin::Description-->
@@ -290,7 +319,7 @@
 						<label class="form-label d-block">Tác giả</label>
 						<!--end::Label-->
 						<!--begin::Input-->
-						<input asp-for="AuthorName" class="form-control mb-2" />
+						<input asp-for="AuthorName" value="@Model.Book.AuthorName" class="form-control mb-2" />
 						<!--end::Input-->
 						<!--begin::Description-->
 						<div class="text-muted fs-7">Tên tác giả của truyện.</div>
@@ -335,7 +364,7 @@
 										<label class="required form-label">Tên Truyện</label>
 										<!--end::Label-->
 										<!--begin::Input-->
-										<input asp-for="Name" type="text" class="form-control mb-2" placeholder="Tên truyện" value="" />
+										<input asp-for="Name" type="text" class="form-control mb-2" placeholder="Tên truyện" value="@Model.Book.Name" />
 										<!--end::Input-->
 										<!--begin::Description-->
 										<span asp-validation-for="Name" class="text-danger"></span>
@@ -349,7 +378,7 @@
 										<label class="form-label">Mô Tả</label>
 										<!--end::Label-->
 										<!--begin::Editor-->
-										<textarea asp-for="Intro" rows="25" class="form-control"></textarea>
+										<textarea name="Intro" asp-for="Book.Intro" rows="25" class="form-control">@Model.Book.Intro</textarea>
 										<!--end::Editor-->
 										<!--begin::Description-->
 										<div class="text-muted fs-7">Mô tả ngắn về truyện.</div>
@@ -371,7 +400,7 @@
 					<!--end::Button-->
 					<!--begin::Button-->
 					<button type="submit" class="btn btn-primary">
-						<span class="indicator-label">Thêm Truyện</span>
+						<span class="indicator-label">Xác Nhận</span>
 						<span class="indicator-progress">Please wait...
 						<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
 					</button>

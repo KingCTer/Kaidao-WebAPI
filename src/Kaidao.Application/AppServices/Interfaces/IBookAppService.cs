@@ -16,7 +16,7 @@ namespace Kaidao.Application.AppServices.Interfaces
 
         bool Create(BookCreateRequest bookCreateRequest);
 
-        bool Update(BookViewModel bookViewModel);
+        bool Update(BookUpdateRequest bookUpdateRequest);
 
         bool Remove(Guid id);
     }

@@ -247,8 +247,42 @@ namespace Kaidao.Application.AppServices
             return Bus.SendCommand(registerCommand).IsCompleted;
         }
 
-        public bool Update(BookViewModel bookViewModel)
+        public bool Update(BookUpdateRequest bookUpdateRequest)
         {
+            var cover = bookUpdateRequest.Book.Cover;
+            if (bookUpdateRequest.ThumbnailImage != null)
+            {
+                cover = this.SaveFile(bookUpdateRequest.ThumbnailImage).Result;
+            }
+
+            Guid authorId;
+            var author = _mapper.Map<AuthorViewModel>(_authorRepository.GetByName(bookUpdateRequest.AuthorName));
+            if (author == null)
+            {
+                var registerAuthorCommand = _mapper.Map<RegisterNewAuthorCommand>(new AuthorViewModel(bookUpdateRequest.AuthorName));
+                Bus.SendCommand(registerAuthorCommand);
+                authorId = _mapper.Map<AuthorViewModel>(_authorRepository.GetByName(bookUpdateRequest.AuthorName)).Id;
+            }
+            else
+            {
+                authorId = author.Id;
+            }
+
+            var bookViewModel = new BookViewModel
+            {
+                Id = bookUpdateRequest.Book.Id,
+                Name = bookUpdateRequest.Name,
+                Status = bookUpdateRequest.Status,
+                Intro = bookUpdateRequest.Intro,
+                CategoryId = bookUpdateRequest.CategoryId,
+                AuthorId = authorId,
+                Key = bookUpdateRequest.Book.Key,
+                View = bookUpdateRequest.Book.View,
+                Like = bookUpdateRequest.Book.Like,
+                ChapterTotal = bookUpdateRequest.Book.ChapterTotal,
+                Cover = cover
+            };
+
             var updateCommand = _mapper.Map<UpdateBookCommand>(bookViewModel);
             return Bus.SendCommand(updateCommand).IsCompleted;
         }

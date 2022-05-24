@@ -235,14 +235,17 @@
 								<!--begin::Category=-->
 								<td>
 									<div class="d-flex align-items-center">
+										@{
+											var bookUrl = ViewBag.PortalAddress + "/Book/Detail?bookId=" + item.Id;
+										}
 										<!--begin::Thumbnail-->
-										<a href="../../demo1/dist/apps/ecommerce/catalog/edit-product.html" class="symbol symbol-50px">
-											<span class="symbol-label" style="background-image:url(@item.Cover);"></span>
+										<a href="@bookUrl" class="symbol symbol-50px">
+											<span class="symbol-label" style="background-image:url(@item.Cover);width: 90px;height: 120px;"></span>
 										</a>
 										<!--end::Thumbnail-->
 										<div class="ms-5">
 											<!--begin::Title-->
-											<a href="../../demo1/dist/apps/ecommerce/catalog/edit-product.html" class="text-gray-800 text-hover-primary fs-5 fw-bolder" data-kt-ecommerce-product-filter="product_name">@item.Name</a>
+											<a href="@bookUrl" class="text-gray-800 text-hover-primary fs-5 fw-bolder" data-kt-ecommerce-product-filter="product_name">@item.Name</a>
 											<!--end::Title-->
 										</div>
 									</div>
@@ -288,8 +291,12 @@
 									<!--begin::Menu-->
 									<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
 										<!--begin::Menu item-->
-										<div class="menu-item px-3">
-											<button class="btn btn-warning">Edit</button>
+										<div class="menu-item px-3 mt-5">
+											<form asp-action="Edit" asp-controller="Book" method="get">
+												<input name="id" type="hidden" value="@item.Id" />
+												<button type="submit" class="btn btn-warning">Edit</button>
+											</form>
+											
 										</div>
 										<!--end::Menu item-->
 										<!--begin::Menu item-->
