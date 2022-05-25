@@ -1,4 +1,5 @@
 ﻿using Kaidao.Domain.AppEntity;
+using Kaidao.Domain.Commands.Book;
 using Kaidao.Domain.Commands.Chapter;
 using Kaidao.Domain.Core.Bus;
 using Kaidao.Domain.Core.Notifications;
@@ -10,7 +11,8 @@ namespace Kaidao.Domain.CommandHandlers
 {
     public class ChapterCommandHandler : CommandHandler,
         IRequestHandler<RegisterNewChapterCommand, bool>,
-        IRequestHandler<UpdateChapterCommand, bool>
+        IRequestHandler<UpdateChapterCommand, bool>,
+        IRequestHandler<RemoveChapterCommand, bool>
     {
         private readonly IChapterRepository _chapterRepository;
         private readonly IMediatorHandler Bus;
@@ -86,5 +88,23 @@ namespace Kaidao.Domain.CommandHandlers
         {
             _chapterRepository.Dispose();
         }
-    }
+
+		public Task<bool> Handle(RemoveChapterCommand request, CancellationToken cancellationToken)
+		{
+            if (!request.IsValid())
+            {
+                NotifyValidationErrors(request);
+                return Task.FromResult(false);
+            }
+
+            _chapterRepository.Remove(request.Id);
+
+            if (Commit())
+            {
+                //Bus.RaiseEvent(new CustomerRemovedEvent(message.Id));
+            }
+
+            return Task.FromResult(true);
+        }
+	}
 }

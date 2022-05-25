@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Kaidao.Application.AppServices.Interfaces;
 using Kaidao.Application.Responses;
 using Kaidao.Application.ViewModels;
+using Kaidao.Domain.Commands.Book;
 using Kaidao.Domain.Commands.Chapter;
 using Kaidao.Domain.Core.Bus;
 using Kaidao.Domain.Interfaces;
@@ -120,12 +121,14 @@ namespace Kaidao.Application.AppServices
 
         public bool Remove(Guid chapterId)
         {
-            throw new NotImplementedException();
+            var removeCommand = new RemoveChapterCommand(chapterId);
+            return Bus.SendCommand(removeCommand).IsCompleted;
         }
 
         public bool Update(ChapterViewModel chapterViewModel)
         {
-            throw new NotImplementedException();
+            var updateCommand = _mapper.Map<UpdateChapterCommand>(chapterViewModel);
+            return Bus.SendCommand(updateCommand).IsCompleted;
         }
     }
 }

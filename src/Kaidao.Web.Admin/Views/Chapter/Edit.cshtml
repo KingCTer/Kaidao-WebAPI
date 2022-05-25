@@ -1,8 +1,8 @@
-﻿@using Kaidao.Web.Admin.ViewModels
-@model ChapterCreateViewModel
+﻿@using Kaidao.Application.ViewModels
+@model ChapterUpdateRequest
 
 @{
-    ViewData["Title"] = "Thêm chương";
+    ViewData["Title"] = "Chỉnh sửa chương truyện";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -28,7 +28,7 @@
 		<!--begin::Page title-->
 		<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
 			<!--begin::Title-->
-			<h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Thêm Chương</h1>
+			<h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Chỉnh Sửa Chương Truyện</h1>
 			<!--end::Title-->
 			<!--begin::Separator-->
 			<span class="h-20px border-gray-300 border-start mx-4"></span>
@@ -62,7 +62,15 @@
 				</li>
 				<!--end::Item-->
 				<!--begin::Item-->
-				<li class="breadcrumb-item text-dark">Thêm chương</li>
+				<li class="breadcrumb-item text-muted">@Model.Chapter.Name</li>
+				<!--end::Item-->
+				<!--begin::Item-->
+				<li class="breadcrumb-item">
+					<span class="bullet bg-gray-300 w-5px h-2px"></span>
+				</li>
+				<!--end::Item-->
+				<!--begin::Item-->
+				<li class="breadcrumb-item text-dark">Chỉnh sửa chương truyện</li>
 				<!--end::Item-->
 			</ul>
 			<!--end::Breadcrumb-->
@@ -163,7 +171,7 @@
 			<!--begin::Secondary button-->
 			<!--end::Secondary button-->
 			<!--begin::Primary button-->
-			<a href="../../demo1/dist/.html" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">Create</a>
+			<a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">Create</a>
 			<!--end::Primary button-->
 		</div>
 		<!--end::Actions-->
@@ -176,11 +184,11 @@
 	<!--begin::Container-->
 	<div id="kt_content_container" class="container-xxl">
 		<!--begin::Form-->
-		<form asp-action="Create" enctype="multipart/form-data" method="post" class="form d-flex flex-column flex-lg-row">
+		<form asp-action="Edit" enctype="multipart/form-data" method="post" class="form d-flex flex-column flex-lg-row">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<input asp-for="Book.Id" type="hidden" value="@Model.Book.Id" />
 			<input asp-for="Book.Name" type="hidden" value="@Model.Book.Name" />
-			<input asp-for="Order" type="hidden" value="@Model.Order" />
+			<input asp-for="Chapter.Id" type="hidden" value="@Model.Chapter.Id" />
 			<!--begin::Aside column-->
 			
 			<!--end::Aside column-->
@@ -208,7 +216,7 @@
 										<h2>@Model.Book.Name</h2>
 									</div>
 									<div class="card-title">
-										<h2>#@Model.Order</h2>
+										<h2>#@Model.Chapter.Order</h2>
 									</div>
 									
 								</div>
@@ -218,10 +226,24 @@
 									<!--begin::Input group-->
 									<div class="mb-10 fv-row">
 										<!--begin::Label-->
+										<label class="required form-label">Order</label>
+										<!--end::Label-->
+										<!--begin::Input-->
+										<input asp-for="Order" type="text" class="form-control mb-2" placeholder="Order ID..." value="@Model.Chapter.Order" />
+										<!--end::Input-->
+										<!--begin::Description-->
+										<span asp-validation-for="Order" class="text-danger"></span>
+										<div class="text-muted fs-7">OrderID là bắt buộc</div>
+										<!--end::Description-->
+									</div>
+									<!--end::Input group-->
+									<!--begin::Input group-->
+									<div class="mb-10 fv-row">
+										<!--begin::Label-->
 										<label class="required form-label">Tên Chương</label>
 										<!--end::Label-->
 										<!--begin::Input-->
-										<input asp-for="Name" type="text" class="form-control mb-2" placeholder="Tên chương" value="" />
+										<input asp-for="Name" type="text" class="form-control mb-2" placeholder="Tên chương" value="@Model.Chapter.Name" />
 										<!--end::Input-->
 										<!--begin::Description-->
 										<span asp-validation-for="Name" class="text-danger"></span>
@@ -235,7 +257,7 @@
 										<label class="form-label">Link truyện</label>
 										<!--end::Label-->
 										<!--begin::Input-->
-										<input asp-for="Url" type="text" class="form-control mb-2" placeholder="Link..." value="" />
+										<input asp-for="Url" type="text" class="form-control mb-2" placeholder="Link..." value="@Model.Chapter.Url" />
 										<!--end::Input-->
 										<!--begin::Description-->
 										<span asp-validation-for="Url" class="text-danger"></span>
@@ -249,7 +271,7 @@
 										<label class="form-label">Mô Tả</label>
 										<!--end::Label-->
 										<!--begin::Editor-->
-										<textarea id="editor" asp-for="Content" rows="25" class="form-control"></textarea>
+										<textarea id="editor" asp-for="@Model.Chapter.Content" name="Content" rows="25" class="form-control"></textarea>
 										<!--end::Editor-->
 										<!--begin::Description-->
 										<div class="text-muted fs-7">Mô tả ngắn về truyện.</div>
@@ -271,7 +293,7 @@
 					<!--end::Button-->
 					<!--begin::Button-->
 					<button type="submit" class="btn btn-primary">
-						<span class="indicator-label">Thêm Chương</span>
+						<span class="indicator-label">Xác Nhận</span>
 						<span class="indicator-progress">Please wait...
 						<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
 					</button>

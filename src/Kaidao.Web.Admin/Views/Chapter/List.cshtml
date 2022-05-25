@@ -290,18 +290,21 @@
 									<!--begin::Menu-->
 									<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
 										<!--begin::Menu item-->
-										<div class="menu-item px-3">
-											<a href="../../demo1/dist/apps/ecommerce/sales/details.html" class="menu-link px-3">View</a>
+										<div class="menu-item px-3 mt-5">
+											<form asp-action="Edit" asp-controller="Chapter" method="get">
+												<input name="chapterId" type="hidden" value="@chapter.Id" />
+												<button type="submit" class="btn btn-warning">Edit</button>
+											</form>
 										</div>
 										<!--end::Menu item-->
 										<!--begin::Menu item-->
-										<div class="menu-item px-3">
-											<a href="../../demo1/dist/apps/ecommerce/sales/edit-order.html" class="menu-link px-3">Edit</a>
-										</div>
-										<!--end::Menu item-->
-										<!--begin::Menu item-->
-										<div class="menu-item px-3">
-											<a href="#" class="menu-link px-3" data-kt-ecommerce-order-filter="delete_row">Delete</a>
+										<div class="menu-item px-3 mt-5">
+											<form asp-action="Delete" asp-controller="Chapter" method="post" enctype="multipart/form-data">
+												<input name="chapterId" type="hidden" value="@chapter.Id" />
+												<input name="bookId" type="hidden" value="@chapter.BookId" />
+												<input name="bookName" type="hidden" value="@Model.BookName" />
+												<button type="submit" class="btn btn-danger">Xoá</button>
+											</form>
 										</div>
 										<!--end::Menu item-->
 									</div>

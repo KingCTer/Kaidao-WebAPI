@@ -25,6 +25,8 @@ namespace Kaidao.Application.AutoMapper
 
             CreateMap<ChapterViewModel, RegisterNewChapterCommand>()
                 .ConstructUsing(c => new RegisterNewChapterCommand(c.BookId, c.Order, c.Name, c.Url, c.Content));
+            CreateMap<ChapterViewModel, UpdateChapterCommand>()
+                .ConstructUsing(c => new UpdateChapterCommand(c.Id, c.Order, c.Name, c.Url, c.Content, c.BookId));
 
             CreateMap<ChapterResponse, UpdateChapterCommand>()
                .ConstructUsing(c => new UpdateChapterCommand(c.Id, c.Order, c.Name, c.Url, c.Content, c.BookId));

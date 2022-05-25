@@ -111,5 +111,66 @@ namespace Kaidao.Web.Admin.Controllers
             return View(viewModel);
 
         }
+
+        [HttpGet]
+        public IActionResult Edit(string chapterId)
+        {
+            Guid id;
+            if (!Guid.TryParse(chapterId, out id))
+            {
+                return RedirectToAction("Index", "Book");
+            }
+
+            var chapter = _chapterAppService.GetChapterById(id);
+            var viewModel = new ChapterUpdateRequest
+            {
+                Chapter = chapter,
+                Book = _bookAppService.GetById(chapter.BookId)
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public IActionResult Edit([FromForm] ChapterUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return RedirectToAction("Edit", new { chapterId = request.Chapter.Id });
+
+
+            var chapterViewModel = new ChapterViewModel
+            {
+                Id = request.Chapter.Id,
+                BookId = request.Book.Id,
+                Name = request.Name,
+                Order = request.Order,
+                Url = request.Url,
+                Content = request.Content,
+            };
+
+            var result = _chapterAppService.Update(chapterViewModel);
+            if (result)
+            {
+                return RedirectToAction("List", new { bookId = request.Book.Id, bookName = request.Book.Name });
+            }
+
+            ModelState.AddModelError("", "Cập nhật chương truyện thất bại");
+            return View(request);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(string chapterId, string bookId, string bookName)
+        {
+            Guid id;
+            if (!Guid.TryParse(chapterId, out id))
+            {
+                return RedirectToAction("Index", "Book");
+            }
+
+            _chapterAppService.Remove(id);
+
+            return RedirectToAction("List", new { bookId = bookId, bookName = bookName });
+        }
     }
 }
