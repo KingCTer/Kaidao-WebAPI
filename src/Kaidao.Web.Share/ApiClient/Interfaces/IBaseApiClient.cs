@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kaidao.Web.Share.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,7 @@ namespace Kaidao.Web.Share.ApiClient.Interfaces
         Task<T> GetAsync<T>(string url, bool requiredLogin = false);
         Task<TResponse> PostAsync<TRequest, TResponse>(string url, TRequest requestContent, bool requiredLogin = true);
         Task<bool> PutAsync<TRequest, TResponse>(string url, TRequest requestContent, bool requiredLogin = true);
+
+        Task<bool> RegisterUser(RegisterRequest registerRequest);
     }
 }

@@ -1,8 +1,11 @@
+using Kaidao.Domain.IdentityEntity;
+using Kaidao.Infra.CrossCutting.Identity.Context;
 using Kaidao.Web.Portal.ProgramExtensions;
 using Kaidao.Web.Share.ApiClient;
 using Kaidao.Web.Share.ApiClient.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -17,6 +20,10 @@ JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 builder.AddDatabaseConfiguration();
 // ----- AutoMapper -----
 builder.AddAutoMapperConfiguration();
+
+//builder.Services.AddIdentity<AppUser, AppRole>()
+//                .AddEntityFrameworkStores<AuthDbContext>()
+//                .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(options =>
 {

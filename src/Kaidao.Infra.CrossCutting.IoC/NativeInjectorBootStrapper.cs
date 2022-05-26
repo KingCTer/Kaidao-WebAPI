@@ -9,8 +9,10 @@ using Kaidao.Domain.Commands.Chapter;
 using Kaidao.Domain.Core.Bus;
 using Kaidao.Domain.Core.Events;
 using Kaidao.Domain.Core.Notifications;
+using Kaidao.Domain.IdentityEntity;
 using Kaidao.Domain.Interfaces;
 using Kaidao.Infra.CrossCutting.Bus;
+using Kaidao.Infra.CrossCutting.Identity.Context;
 using Kaidao.Infra.CrossCutting.Identity.Models;
 using Kaidao.Infra.CrossCutting.Identity.Repository;
 using Kaidao.Infra.Data.Context;
@@ -19,6 +21,7 @@ using Kaidao.Infra.Data.Repository;
 using Kaidao.Infra.Data.Repository.EventSourcing;
 using Kaidao.Infra.Data.UoW;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using NovelQT.Infra.Data.Repository.EventSourcing;
 
@@ -60,6 +63,7 @@ public class NativeInjectorBootStrapper
 
         // Infra - Data
         services.AddScoped<AppDbContext>();
+        services.AddScoped<AuthDbContext>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();

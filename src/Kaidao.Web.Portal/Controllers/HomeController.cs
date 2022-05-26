@@ -34,7 +34,6 @@ namespace Kaidao.Web.Portal.Controllers
 
         public IActionResult Login(string returnUrl)
         {
-
             return Challenge(new AuthenticationProperties
             {
                 RedirectUri = returnUrl

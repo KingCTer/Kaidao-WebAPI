@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using IdentityModel.Client;
+using Kaidao.Web.Share.ViewModels;
 
 namespace Kaidao.Web.Share.ApiClient
 {
@@ -142,6 +143,29 @@ namespace Kaidao.Web.Share.ApiClient
             if (response.IsSuccessStatusCode)
                 return true;
 
+            throw new Exception(body);
+        }
+
+        public async Task<bool> RegisterUser(RegisterRequest registerRequest)
+        {
+            var client = _httpClientFactory.CreateClient(CLIENT_NAME);
+            client.BaseAddress = new Uri(CLIENT_BASE);
+
+            StringContent httpContent = null;
+            if (registerRequest != null)
+            {
+                var json = JsonSerializer.Serialize(registerRequest);
+                httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            }
+
+            var response = await client.PostAsync($"/api/users", httpContent);
+
+            var body = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonSerializer.Deserialize<bool>(body);
+            }
             throw new Exception(body);
         }
     }
