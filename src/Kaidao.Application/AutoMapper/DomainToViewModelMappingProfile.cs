@@ -15,6 +15,9 @@ namespace Kaidao.Application.AutoMapper
             CreateMap<Category, CategoryViewModel>();
             CreateMap<Book, BookViewModel>();
             CreateMap<Chapter, ChapterViewModel>();
+            CreateMap<AppRole, RoleViewModel>();
+            CreateMap<Function, FunctionViewModel>();
+            CreateMap<CommandInFunction, CommandInFunctionViewModel>();
         }
     }
 }

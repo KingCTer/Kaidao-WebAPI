@@ -5,6 +5,7 @@ using Kaidao.Domain.Commands.Author;
 using Kaidao.Domain.Commands.Book;
 using Kaidao.Domain.Commands.Category;
 using Kaidao.Domain.Commands.Chapter;
+using Kaidao.Domain.Commands.Role;
 
 namespace Kaidao.Application.AutoMapper
 {
@@ -30,6 +31,11 @@ namespace Kaidao.Application.AutoMapper
 
             CreateMap<ChapterResponse, UpdateChapterCommand>()
                .ConstructUsing(c => new UpdateChapterCommand(c.Id, c.Order, c.Name, c.Url, c.Content, c.BookId));
+
+            CreateMap<RoleViewModel, RegisterNewRoleCommand>()
+                .ConstructUsing(c => new RegisterNewRoleCommand(c.Id, c.Name));
+            CreateMap<RoleViewModel, UpdateRoleCommand>()
+                .ConstructUsing(c => new UpdateRoleCommand(c.Id, c.Name));
         }
     }
 }

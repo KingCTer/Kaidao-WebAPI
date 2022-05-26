@@ -1,13 +1,13 @@
 ﻿using Kaidao.Domain.Commands.Book;
-using Kaidao.Domain.Validations.Chapter;
+using Kaidao.Domain.Commands.Role;
 
-namespace Kaidao.Domain.Validations.Book
+namespace Kaidao.Domain.Validations.Chapter
 {
-	public class RemoveChapterCommandValidation : ChapterValidation<RemoveChapterCommand>
-	{
-		public RemoveChapterCommandValidation()
-		{
-			ValidateId();
-		}
-	}
+    public class RemoveChapterCommandValidation : ChapterValidation<RemoveChapterCommand>
+    {
+        public RemoveChapterCommandValidation()
+        {
+            ValidateId();
+        }
+    }
 }

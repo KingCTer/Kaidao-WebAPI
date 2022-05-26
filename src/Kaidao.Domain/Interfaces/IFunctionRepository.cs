@@ -4,5 +4,6 @@ namespace Kaidao.Domain.Interfaces
 {
     public interface IFunctionRepository : IRepository<Function>
     {
+
     }
 }

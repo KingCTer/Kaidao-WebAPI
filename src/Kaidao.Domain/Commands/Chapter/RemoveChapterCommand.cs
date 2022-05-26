@@ -1,10 +1,5 @@
 ﻿using Kaidao.Domain.Commands.Chapter;
-using Kaidao.Domain.Validations.Book;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Kaidao.Domain.Validations.Chapter;
 
 namespace Kaidao.Domain.Commands.Book
 {

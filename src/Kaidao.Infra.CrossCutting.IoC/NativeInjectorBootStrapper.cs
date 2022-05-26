@@ -6,6 +6,7 @@ using Kaidao.Domain.Commands.Author;
 using Kaidao.Domain.Commands.Book;
 using Kaidao.Domain.Commands.Category;
 using Kaidao.Domain.Commands.Chapter;
+using Kaidao.Domain.Commands.Role;
 using Kaidao.Domain.Core.Bus;
 using Kaidao.Domain.Core.Events;
 using Kaidao.Domain.Core.Notifications;
@@ -42,6 +43,7 @@ public class NativeInjectorBootStrapper
         services.AddScoped<IBookAppService, BookAppService>();
         services.AddScoped<IChapterAppService, ChapterAppService>();
         services.AddScoped<ICategoryAppService, CategoryAppService>();
+        services.AddScoped<IRoleAppService, RoleAppService>();
 
         services.AddScoped<IStorageService, FileStorageService>();
 
@@ -61,6 +63,10 @@ public class NativeInjectorBootStrapper
         services.AddScoped<IRequestHandler<UpdateChapterCommand, bool>, ChapterCommandHandler>();
         services.AddScoped<IRequestHandler<RemoveChapterCommand, bool>, ChapterCommandHandler>();
 
+        services.AddScoped<IRequestHandler<RegisterNewRoleCommand, bool>, RoleCommandHandler>();
+        services.AddScoped<IRequestHandler<UpdateRoleCommand, bool>, RoleCommandHandler>();
+        services.AddScoped<IRequestHandler<RemoveRoleCommand, bool>, RoleCommandHandler>();
+
         // Infra - Data
         services.AddScoped<AppDbContext>();
         services.AddScoped<AuthDbContext>();
@@ -69,11 +75,14 @@ public class NativeInjectorBootStrapper
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IPermissionRepository, PermissionRepository>();
         services.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
+        services.AddScoped<IFunctionRepository, FunctionRepository>();
+        services.AddScoped<ICommandInFunctionRepository, CommandInFunctionRepository>();
 
         services.AddScoped<IAuthorRepository, AuthorRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IBookRepository, BookRepository>();
         services.AddScoped<IChapterRepository, ChapterRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
 
         // Infra - Data EventSourcing
         services.AddScoped<IEventStoreRepository, EventStoreSqlRepository>();
