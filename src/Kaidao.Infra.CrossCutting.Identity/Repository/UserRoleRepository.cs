@@ -17,5 +17,20 @@ namespace Kaidao.Infra.CrossCutting.Identity.Repository
         {
             return DbSet.AsNoTracking().FirstOrDefault(u => u.UserId == userId);
         }
+
+        public void Update(string userId, string roleId, string updateRoleId)
+        {
+            var userRole = new IdentityUserRole<string>();
+            userRole.UserId = userId;
+            userRole.RoleId = roleId;
+
+            DbSet.Remove(userRole);
+
+            var updateUserRole = new IdentityUserRole<string>();
+            updateUserRole.UserId = userId;
+            updateUserRole.RoleId = updateRoleId;
+
+            DbSet.Add(updateUserRole);
+        }
     }
 }

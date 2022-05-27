@@ -83,6 +83,40 @@ namespace Kaidao.Web.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult UserRole(string userId)
+        {
+            var userRole = _userRoleRepository.GetByUserId(userId);
+
+            if (userRole == null)
+            {
+                return RedirectToAction("Index", "User");
+            }
+
+            var viewModel = new UserUpdateRoleViewModel();
+            viewModel.UserId = userId;
+            viewModel.RoleList = _roleAppService.GetAll().ToList();
+            viewModel.RoleId = userRole.RoleId;
+            viewModel.UpdateRoleId = userRole.RoleId;
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public IActionResult UserUpdateRole([FromForm] UserUpdateRoleViewModel viewModel)
+        {
+            if (viewModel.UpdateRoleId == viewModel.RoleId)
+            {
+                RedirectToAction("Index", "User");
+            }
+
+
+            _userRoleRepository.Update(viewModel.UserId, viewModel.RoleId, viewModel.UpdateRoleId);
+            _userRoleRepository.SaveChanges();
+
+            return RedirectToAction("Index", "User");
+        }
+
 
         public IActionResult UserPermission(string userId)
         {
