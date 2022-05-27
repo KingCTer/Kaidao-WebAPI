@@ -8,5 +8,6 @@ namespace Kaidao.Domain.Interfaces
         AppRole GetByName(string name);
 
         void Remove(string id);
+        void Add(string roleName);
     }
 }

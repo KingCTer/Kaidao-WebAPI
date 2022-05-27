@@ -172,5 +172,39 @@ namespace Kaidao.Web.Admin.Controllers
             return RedirectToAction("UserPermission", "Role", new { userId = viewModel.UserId });
         }
 
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public IActionResult Add([FromForm] RoleGroupViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+                return RedirectToAction("Index");
+
+            var roleName = viewModel.RoleUpdateName;
+            if (_roleAppService.GetByName(roleName) != null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            _roleRepository.Add(roleName);
+            _roleRepository.SaveChanges();
+
+            var permissionUpdateList = viewModel.Permission;
+
+            var roleId = roleName;
+            permissionUpdateList.ForEach(p =>
+            {
+                if (p.IsEnable)
+                {
+                    _permissionRepository.Add(roleId, p.FunctionId, p.CommandId);
+                }
+
+            });
+            _permissionRepository.SaveChanges();
+
+
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

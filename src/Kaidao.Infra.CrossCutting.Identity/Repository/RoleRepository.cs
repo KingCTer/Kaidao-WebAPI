@@ -27,5 +27,18 @@ namespace Kaidao.Infra.CrossCutting.Identity.Repository
         {
             DbSet.Remove(GetById(id));
         }
+
+        public void Add(string roleName)
+        {
+            var appRole = new AppRole
+            {
+                Id = roleName,
+                Name = roleName,
+                NormalizedName = roleName.ToUpper(),
+                IsSystemRole = false,
+            };
+
+            DbSet.Add(appRole);
+        }
     }
 }
