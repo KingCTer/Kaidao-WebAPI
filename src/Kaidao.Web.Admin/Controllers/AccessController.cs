@@ -36,7 +36,7 @@ namespace Kaidao.Web.Admin.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> AccessDenied()
+        public async Task<IActionResult> Denied()
         {
             var data = await _baseApiClient.GetResponseAsync("api/Permissions/check", true);
             switch (data.StatusCode)
@@ -52,6 +52,32 @@ namespace Kaidao.Web.Admin.Controllers
                     break;
             }
             return View();
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> AccessDenied(string msg, string returnUrl)
+        {
+            var data = await _baseApiClient.GetResponseAsync("api/Permissions/check", true);
+            switch (data.StatusCode)
+            {
+                case HttpStatusCode.Unauthorized:
+                    await HttpContext.SignOutAsync();
+                    return Challenge(new AuthenticationProperties
+                    {
+                        RedirectUri = returnUrl
+                    });
+
+                default:
+                    break;
+            }
+            ViewBag.Msg = msg;
+            return View();
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return SignOut("oidc");
         }
     }
 }

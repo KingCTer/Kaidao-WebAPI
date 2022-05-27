@@ -20,17 +20,26 @@ namespace Kaidao.Web.Admin.Authorization
         {
             var permissionsClaim = context.HttpContext.User.Claims
                 .SingleOrDefault(c => c.Type == IdentityConstant.Claims.Permissions);
+
+            var routeUrl = context.RouteData.Values;
+            var qsPath = context.HttpContext.Request.QueryString.Value;
+            var returnUrl = $"/{routeUrl["controller"]}/{routeUrl["action"]}{qsPath}";
+
             if (permissionsClaim != null)
             {
                 var permissions = JsonSerializer.Deserialize<List<string>>(permissionsClaim.Value);
                 if (!permissions!.Contains(_functionCode + "_" + _commandCode))
                 {
-                    context.Result = new ForbidResult();
+                    var msg = $"Requirement Permission: {_functionCode}_{_commandCode}";
+
+                    
+
+                    context.Result = new RedirectToActionResult("AccessDenied", "Access", new { msg = msg, returnUrl = returnUrl });
                 }
             }
             else
             {
-                context.Result = new ForbidResult();
+                context.Result = new RedirectToActionResult("AccessDenied", "Access", new { msg = "Permission Null", returnUrl = returnUrl });
             }
         }
     }
