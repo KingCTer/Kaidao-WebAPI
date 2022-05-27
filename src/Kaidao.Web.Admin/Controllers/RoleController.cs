@@ -14,20 +14,23 @@ namespace Kaidao.Web.Admin.Controllers
         private readonly IPermissionRepository _permissionRepository;
         private readonly IUserPermissionRepository _userPermissionRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly IUserRoleRepository _userRoleRepository;
 
         public RoleController(
             IBaseApiClient baseApiClient,
             IRoleAppService roleAppService,
             IPermissionRepository permissionRepository,
             IUserPermissionRepository userPermissionRepository,
-            IRoleRepository roleRepository
+            IRoleRepository roleRepository,
+            IUserRoleRepository userRoleRepository
         ) : base(baseApiClient)
         {
             _roleAppService = roleAppService;
             _permissionRepository = permissionRepository;
             _userPermissionRepository = userPermissionRepository;
             _roleRepository = roleRepository;
-    }
+            _userRoleRepository = userRoleRepository;
+        }
 
         public IActionResult Index()
         {
@@ -90,7 +93,7 @@ namespace Kaidao.Web.Admin.Controllers
                 return RedirectToAction("Index", "User");
             }
 
-            var userRole = User.Claims.FirstOrDefault(c => c.Type == "role").Value;
+            var userRole = _userRoleRepository.GetByUserId(userId).RoleId;
             var rolePermission = _roleAppService.GetRoleWithPermission(userRole);
             rolePermission.UserId = userId;
 

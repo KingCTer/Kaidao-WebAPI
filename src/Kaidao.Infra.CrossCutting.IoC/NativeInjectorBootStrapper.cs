@@ -83,6 +83,7 @@ public class NativeInjectorBootStrapper
         services.AddScoped<IBookRepository, BookRepository>();
         services.AddScoped<IChapterRepository, ChapterRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
         // Infra - Data EventSourcing
         services.AddScoped<IEventStoreRepository, EventStoreSqlRepository>();

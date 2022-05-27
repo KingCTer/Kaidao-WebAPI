@@ -1,6 +1,7 @@
 ﻿using Kaidao.Domain.IdentityEntity;
 using Kaidao.Domain.IdentityEntity.Configurations;
 using Kaidao.Infra.CrossCutting.Identity.Seeds;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
