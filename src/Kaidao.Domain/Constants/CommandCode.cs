@@ -6,6 +6,8 @@
         READ,
         UPDATE,
         DELETE,
-        APPROVE
+        APPROVE,
+        ACCESS,
+        LIST
     }
 }

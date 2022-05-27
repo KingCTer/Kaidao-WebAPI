@@ -3,6 +3,11 @@
     public enum FunctionCode
     {
         SYSTEM,
-        ADMIN
+        ADMIN,
+        CHAPTER,
+        BOOK,
+        ROLE,
+        PERMISSION,
+        USER
     }
 }

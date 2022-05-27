@@ -2,6 +2,8 @@
 using Kaidao.Application.Common;
 using Kaidao.Application.Responses;
 using Kaidao.Application.ViewModels;
+using Kaidao.Domain.Constants;
+using Kaidao.Web.Admin.Authorization;
 using Kaidao.Web.Admin.ViewModels;
 using Kaidao.Web.Share.ApiClient.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -26,12 +28,9 @@ namespace Kaidao.Web.Admin.Controllers
             _bookAppService = bookAppService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
 
         [HttpGet]
+        [ClaimRequirement(FunctionCode.CHAPTER, CommandCode.LIST)]
         public IActionResult List(string bookId = "", int pageIndex = 1, int pageSize = 50, string keyword = "", string bookName = "")
         {
             Guid id;
@@ -68,6 +67,7 @@ namespace Kaidao.Web.Admin.Controllers
         }
 
         [HttpGet]
+        [ClaimRequirement(FunctionCode.CHAPTER, CommandCode.CREATE)]
         public IActionResult Create(string bookId = "")
         {
             Guid id;
@@ -88,6 +88,7 @@ namespace Kaidao.Web.Admin.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
+        [ClaimRequirement(FunctionCode.CHAPTER, CommandCode.CREATE)]
         public IActionResult Create([FromForm] ChapterCreateViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -113,6 +114,7 @@ namespace Kaidao.Web.Admin.Controllers
         }
 
         [HttpGet]
+        [ClaimRequirement(FunctionCode.CHAPTER, CommandCode.UPDATE)]
         public IActionResult Edit(string chapterId)
         {
             Guid id;
@@ -133,6 +135,7 @@ namespace Kaidao.Web.Admin.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
+        [ClaimRequirement(FunctionCode.CHAPTER, CommandCode.UPDATE)]
         public IActionResult Edit([FromForm] ChapterUpdateRequest request)
         {
             if (!ModelState.IsValid)
@@ -160,6 +163,7 @@ namespace Kaidao.Web.Admin.Controllers
         }
 
         [HttpPost]
+        [ClaimRequirement(FunctionCode.CHAPTER, CommandCode.DELETE)]
         public IActionResult Delete(string chapterId, string bookId, string bookName)
         {
             Guid id;

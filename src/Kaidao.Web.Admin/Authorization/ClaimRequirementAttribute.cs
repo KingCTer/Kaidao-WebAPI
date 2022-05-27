@@ -1,4 +1,4 @@
-﻿using Kaidao.Web.Admin.Constants;
+﻿using Kaidao.Domain.Constants;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kaidao.Web.Admin.Authorization

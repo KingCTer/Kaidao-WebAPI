@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Results;
+using Kaidao.Domain.Constants;
 using Kaidao.Web.Admin.Authorization;
-using Kaidao.Web.Admin.Constants;
 using Kaidao.Web.Share.ApiClient.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;

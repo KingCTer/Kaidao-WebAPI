@@ -1,9 +1,10 @@
 ﻿using Kaidao.Application.AppServices.Interfaces;
 using Kaidao.Application.ViewModels;
+using Kaidao.Domain.Constants;
 using Kaidao.Domain.Interfaces;
+using Kaidao.Web.Admin.Authorization;
 using Kaidao.Web.Admin.ViewModels;
 using Kaidao.Web.Share.ApiClient.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kaidao.Web.Admin.Controllers
@@ -32,6 +33,8 @@ namespace Kaidao.Web.Admin.Controllers
             _userRoleRepository = userRoleRepository;
         }
 
+        [HttpGet]
+        [ClaimRequirement(FunctionCode.ROLE, CommandCode.LIST)]
         public IActionResult Index()
         {
             var viewModel = new RoleGroupViewModel();
@@ -41,6 +44,8 @@ namespace Kaidao.Web.Admin.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
+        [ClaimRequirement(FunctionCode.ROLE, CommandCode.UPDATE)]
+        [ClaimRequirement(FunctionCode.PERMISSION, CommandCode.UPDATE)]
         public IActionResult Edit([FromForm] RoleGroupViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -83,6 +88,8 @@ namespace Kaidao.Web.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        [ClaimRequirement(FunctionCode.ROLE, CommandCode.READ)]
         public IActionResult UserRole(string userId)
         {
             var userRole = _userRoleRepository.GetByUserId(userId);
@@ -103,6 +110,7 @@ namespace Kaidao.Web.Admin.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
+        [ClaimRequirement(FunctionCode.ROLE, CommandCode.UPDATE)]
         public IActionResult UserUpdateRole([FromForm] UserUpdateRoleViewModel viewModel)
         {
             if (viewModel.UpdateRoleId == viewModel.RoleId)
@@ -117,7 +125,8 @@ namespace Kaidao.Web.Admin.Controllers
             return RedirectToAction("Index", "User");
         }
 
-
+        [HttpGet]
+        [ClaimRequirement(FunctionCode.PERMISSION, CommandCode.READ)]
         public IActionResult UserPermission(string userId)
         {
             var userPermissions = _userPermissionRepository.GetByUserId(userId);
@@ -171,6 +180,7 @@ namespace Kaidao.Web.Admin.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
+        [ClaimRequirement(FunctionCode.PERMISSION, CommandCode.UPDATE)]
         public IActionResult EditUserPermission([FromForm] UserRolePermissionViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -208,6 +218,8 @@ namespace Kaidao.Web.Admin.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
+        [ClaimRequirement(FunctionCode.ROLE, CommandCode.CREATE)]
+        [ClaimRequirement(FunctionCode.PERMISSION, CommandCode.CREATE)]
         public IActionResult Add([FromForm] RoleGroupViewModel viewModel)
         {
             if (!ModelState.IsValid)

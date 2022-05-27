@@ -1,4 +1,4 @@
-﻿using Kaidao.Web.Admin.Constants;
+﻿using Kaidao.Domain.Constants;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text.Json;

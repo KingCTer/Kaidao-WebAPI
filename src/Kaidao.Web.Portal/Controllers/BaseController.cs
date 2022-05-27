@@ -29,10 +29,15 @@ namespace Kaidao.Web.Portal.Controllers
                 {
                     case HttpStatusCode.Unauthorized:
                         string redirectUri = "/" + context.RouteData.Values["controller"] + "/" + context.RouteData.Values["action"];
+
+                        var routeUrl = Url.RouteUrl(context.RouteData.Values);
+                        var qsPath = context.HttpContext.Request.QueryString.Value;
+                        var returnUrl = $"{routeUrl}{qsPath}";
+
                         await HttpContext.SignOutAsync();
                         context.Result = Challenge(new AuthenticationProperties
                         {
-                            RedirectUri = redirectUri
+                            RedirectUri = returnUrl
                         });
                         break;
 

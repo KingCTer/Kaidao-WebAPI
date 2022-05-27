@@ -7,6 +7,7 @@
         UPDATE,
         DELETE,
         APPROVE,
-        ACCESS
+        ACCESS,
+        LIST
     }
 }

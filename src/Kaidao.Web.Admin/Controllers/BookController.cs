@@ -3,6 +3,8 @@ using Kaidao.Application.AppServices.Interfaces;
 using Kaidao.Application.Common;
 using Kaidao.Application.Responses;
 using Kaidao.Application.ViewModels;
+using Kaidao.Domain.Constants;
+using Kaidao.Web.Admin.Authorization;
 using Kaidao.Web.Share.ApiClient.Interfaces;
 using Kaidao.Web.Share.Query;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +29,8 @@ namespace Kaidao.Web.Admin.Controllers
             _categoryAppService = categoryAppService;
         }
 
+        [HttpGet]
+        [ClaimRequirement(FunctionCode.BOOK, CommandCode.LIST)]
         public IActionResult Index(PaginationFilter filter, string queryType = "")
         {
             var query = "";
@@ -52,6 +56,7 @@ namespace Kaidao.Web.Admin.Controllers
         }
 
         [HttpGet]
+        [ClaimRequirement(FunctionCode.BOOK, CommandCode.CREATE)]
         public IActionResult Create()
         {
             var viewModel = new BookCreateRequest();
@@ -61,6 +66,7 @@ namespace Kaidao.Web.Admin.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
+        [ClaimRequirement(FunctionCode.BOOK, CommandCode.CREATE)]
         public IActionResult Create([FromForm] BookCreateRequest request)
         {
             request.CategoryList = _categoryAppService.GetAll().ToList();
@@ -79,6 +85,7 @@ namespace Kaidao.Web.Admin.Controllers
         }
 
         [HttpPost]
+        [ClaimRequirement(FunctionCode.BOOK, CommandCode.DELETE)]
         public IActionResult Delete(Guid id)
         {
             _bookAppService.Remove(id);
@@ -87,6 +94,7 @@ namespace Kaidao.Web.Admin.Controllers
         }
 
         [HttpGet]
+        [ClaimRequirement(FunctionCode.BOOK, CommandCode.UPDATE)]
         public IActionResult Edit(Guid id)
         {
             var viewModel = new BookUpdateRequest();
@@ -98,6 +106,7 @@ namespace Kaidao.Web.Admin.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
+        [ClaimRequirement(FunctionCode.BOOK, CommandCode.UPDATE)]
         public IActionResult Edit([FromForm] BookUpdateRequest request)
         {
             if (!ModelState.IsValid)

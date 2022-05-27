@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Kaidao.Web.Admin.Authorization;
-using Kaidao.Web.Admin.Constants;
 using System.Net;
+using Kaidao.Domain.Constants;
 
 namespace Kaidao.Web.Admin.Controllers
 {
