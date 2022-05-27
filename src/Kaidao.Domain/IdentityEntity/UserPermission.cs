@@ -2,6 +2,18 @@
 {
     public class UserPermission
     {
+        public UserPermission()
+        {
+        }
+
+        public UserPermission(string userId, string functionId, string commandId, bool allow)
+        {
+            UserId = userId;
+            FunctionId = functionId;
+            CommandId = commandId;
+            Allow = allow;
+        }
+
         public string UserId { get; set; }
         public AppUser User { get; set; }
 

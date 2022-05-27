@@ -12,5 +12,7 @@ namespace Kaidao.Application.AppServices.Interfaces
         public IEnumerable<RoleViewModel> GetAll();
 
         List<RoleWithPermissionViewModel> GetAllWithPermission();
+
+        UserRolePermissionViewModel GetRoleWithPermission(string roleId);
     }
 }

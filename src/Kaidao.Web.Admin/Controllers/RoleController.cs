@@ -10,22 +10,22 @@ namespace Kaidao.Web.Admin.Controllers
 {
     public class RoleController : BaseController
     {
-        private readonly IUnitOfWork _uow;
         private readonly IRoleAppService _roleAppService;
         private readonly IPermissionRepository _permissionRepository;
+        private readonly IUserPermissionRepository _userPermissionRepository;
         private readonly IRoleRepository _roleRepository;
 
         public RoleController(
             IBaseApiClient baseApiClient,
-            IUnitOfWork uow,
             IRoleAppService roleAppService,
             IPermissionRepository permissionRepository,
+            IUserPermissionRepository userPermissionRepository,
             IRoleRepository roleRepository
         ) : base(baseApiClient)
         {
             _roleAppService = roleAppService;
             _permissionRepository = permissionRepository;
-            _uow = uow;
+            _userPermissionRepository = userPermissionRepository;
             _roleRepository = roleRepository;
     }
 
@@ -80,6 +80,94 @@ namespace Kaidao.Web.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+
+        public IActionResult UserPermission(string userId)
+        {
+            var userPermissions = _userPermissionRepository.GetByUserId(userId);
+
+            if (userPermissions == null)
+            {
+                return RedirectToAction("Index", "User");
+            }
+
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == "role").Value;
+            var rolePermission = _roleAppService.GetRoleWithPermission(userRole);
+            rolePermission.UserId = userId;
+
+            for (int i = 0; i < rolePermission.UserPermission.Count; i++)
+            {
+                var rp = rolePermission.UserPermission[i];
+                for (int j = 0; j < rp.Permissions.Count; j++)
+                {
+                    var p = rp.Permissions[j];
+                    var userPermission = userPermissions.FirstOrDefault(a => a.FunctionId == p.Item1.FunctionId && a.CommandId == p.Item1.CommandId);
+                    if (userPermission != null)
+                    {
+                        var asignassignBy = "Default";
+                        if (userPermission.Allow)
+                        {
+                            if (p.Item2)
+                            {
+                                asignassignBy = "RoleUser";
+                            } else
+                            {
+                                asignassignBy = "User";
+                            }
+                        } else
+                        {
+                            if (p.Item2)
+                            {
+                                asignassignBy = "User";
+                            }
+                            else
+                            {
+                                asignassignBy = "RoleUser";
+                            }
+                        }
+                        rp.Permissions[j] = new Tuple<CommandInFunctionViewModel, bool, string>(p.Item1, userPermission.Allow, asignassignBy);
+                    }
+                }
+            }
+
+            return View(rolePermission);
+        }
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public IActionResult EditUserPermission([FromForm] UserRolePermissionViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+                return RedirectToAction("UserPermission", "Role", new { userId = viewModel .UserId});
+
+            var updateList = viewModel.Permission;
+            updateList.ForEach(up =>
+            {
+                var baseUserPermission = _userPermissionRepository.GetPermission(viewModel.UserId, up.FunctionId, up.CommandId);
+                if (baseUserPermission != null)
+                {
+                    if (up.IsFactory)
+                    {
+                        _userPermissionRepository.Remove(baseUserPermission);
+                    } else
+                    {
+                        if (baseUserPermission.Allow != up.IsEnable)
+                        {
+                            _userPermissionRepository.Update(viewModel.UserId, up.FunctionId, up.CommandId, up.IsEnable);
+                        }
+                    }
+                } else
+                {
+                    if (!up.IsFactory)
+                    {
+                        _userPermissionRepository.Add(viewModel.UserId, up.FunctionId, up.CommandId, up.IsEnable);
+                    }
+                }
+            });
+
+            _userPermissionRepository.SaveChanges();
+
+            return RedirectToAction("UserPermission", "Role", new { userId = viewModel.UserId });
+        }
 
     }
 }

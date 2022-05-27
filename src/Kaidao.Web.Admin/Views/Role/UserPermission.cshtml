@@ -1,0 +1,320 @@
+﻿@model Kaidao.Application.ViewModels.UserRolePermissionViewModel
+
+@{
+    ViewData["Title"] = "User Permission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--begin::Toolbar-->
+<div class="toolbar" id="kt_toolbar">
+	<!--begin::Container-->
+	<div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+		<!--begin::Page title-->
+		<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+			<!--begin::Title-->
+			<h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Users List</h1>
+			<!--end::Title-->
+			<!--begin::Separator-->
+			<span class="h-20px border-gray-300 border-start mx-4"></span>
+			<!--end::Separator-->
+			<!--begin::Breadcrumb-->
+			<ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+				<!--begin::Item-->
+				<li class="breadcrumb-item text-muted">
+					<a asp-controller="Home" asp-action="Index" class="text-muted text-hover-primary">Trang Chủ</a>
+				</li>
+				<!--end::Item-->
+				<!--begin::Item-->
+				<li class="breadcrumb-item">
+					<span class="bullet bg-gray-300 w-5px h-2px"></span>
+				</li>
+				<!--end::Item-->
+				<!--begin::Item-->
+				<li class="breadcrumb-item text-muted">User Management</li>
+				<!--end::Item-->
+				<!--begin::Item-->
+				<li class="breadcrumb-item">
+					<span class="bullet bg-gray-300 w-5px h-2px"></span>
+				</li>
+				<!--end::Item-->
+				<!--begin::Item-->
+				<li class="breadcrumb-item text-muted">Users</li>
+				<!--end::Item-->
+				<!--begin::Item-->
+				<li class="breadcrumb-item">
+					<span class="bullet bg-gray-300 w-5px h-2px"></span>
+				</li>
+				<!--end::Item-->
+				<!--begin::Item-->
+				<li class="breadcrumb-item text-dark">Users Permisson</li>
+				<!--end::Item-->
+			</ul>
+			<!--end::Breadcrumb-->
+		</div>
+		<!--end::Page title-->
+		<!--begin::Actions-->
+		<div class="d-flex align-items-center gap-2 gap-lg-3">
+			<!--begin::Filter menu-->
+			<div class="m-0">
+				<!--begin::Menu toggle-->
+				<a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+				<!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
+				<span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+						<path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="currentColor" />
+					</svg>
+				</span>
+				<!--end::Svg Icon-->Filter</a>
+				<!--end::Menu toggle-->
+				<!--begin::Menu 1-->
+				<div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_624475ed0ca19">
+					<!--begin::Header-->
+					<div class="px-7 py-5">
+						<div class="fs-5 text-dark fw-bolder">Filter Options</div>
+					</div>
+					<!--end::Header-->
+					<!--begin::Menu separator-->
+					<div class="separator border-gray-200"></div>
+					<!--end::Menu separator-->
+					<!--begin::Form-->
+					<div class="px-7 py-5">
+						<!--begin::Input group-->
+						<div class="mb-10">
+							<!--begin::Label-->
+							<label class="form-label fw-bold">Status:</label>
+							<!--end::Label-->
+							<!--begin::Input-->
+							<div>
+								<select class="form-select form-select-solid" data-kt-select2="true" data-placeholder="Select option" data-dropdown-parent="#kt_menu_624475ed0ca19" data-allow-clear="true">
+									<option></option>
+									<option value="1">Approved</option>
+									<option value="2">Pending</option>
+									<option value="2">In Process</option>
+									<option value="2">Rejected</option>
+								</select>
+							</div>
+							<!--end::Input-->
+						</div>
+						<!--end::Input group-->
+						<!--begin::Input group-->
+						<div class="mb-10">
+							<!--begin::Label-->
+							<label class="form-label fw-bold">Member Type:</label>
+							<!--end::Label-->
+							<!--begin::Options-->
+							<div class="d-flex">
+								<!--begin::Options-->
+								<label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+									<input class="form-check-input" type="checkbox" value="1" />
+									<span class="form-check-label">Author</span>
+								</label>
+								<!--end::Options-->
+								<!--begin::Options-->
+								<label class="form-check form-check-sm form-check-custom form-check-solid">
+									<input class="form-check-input" type="checkbox" value="2" checked="checked" />
+									<span class="form-check-label">Customer</span>
+								</label>
+								<!--end::Options-->
+							</div>
+							<!--end::Options-->
+						</div>
+						<!--end::Input group-->
+						<!--begin::Input group-->
+						<div class="mb-10">
+							<!--begin::Label-->
+							<label class="form-label fw-bold">Notifications:</label>
+							<!--end::Label-->
+							<!--begin::Switch-->
+							<div class="form-check form-switch form-switch-sm form-check-custom form-check-solid">
+								<input class="form-check-input" type="checkbox" value="" name="notifications" checked="checked" />
+								<label class="form-check-label">Enabled</label>
+							</div>
+							<!--end::Switch-->
+						</div>
+						<!--end::Input group-->
+						<!--begin::Actions-->
+						<div class="d-flex justify-content-end">
+							<button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2" data-kt-menu-dismiss="true">Reset</button>
+							<button type="submit" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true">Apply</button>
+						</div>
+						<!--end::Actions-->
+					</div>
+					<!--end::Form-->
+				</div>
+				<!--end::Menu 1-->
+			</div>
+			<!--end::Filter menu-->
+			<!--begin::Secondary button-->
+			<!--end::Secondary button-->
+			<!--begin::Primary button-->
+			<a href="../../demo1/dist/.html" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">Create</a>
+			<!--end::Primary button-->
+		</div>
+		<!--end::Actions-->
+	</div>
+	<!--end::Container-->
+</div>
+<!--end::Toolbar-->
+<!--begin::Post-->
+<div class="post d-flex flex-column-fluid" id="kt_post">
+	<!--begin::Container-->
+	<div id="kt_content_container" class="container-xxl">
+		<!--begin::Modal dialog-->
+		<div>
+			<!--begin::Modal content-->
+			<div class="modal-content">
+				<!--begin::Modal header-->
+				<div class="modal-header">
+					<!--begin::Modal title-->
+					<h2 class="fw-bolder">Update User Permission</h2>
+					<!--end::Modal title-->
+					<!--begin::Close-->
+					<div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-roles-modal-action="close">
+						<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+						<span class="svg-icon svg-icon-1">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+								<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+								<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+							</svg>
+						</span>
+						<!--end::Svg Icon-->
+					</div>
+					<!--end::Close-->
+				</div>
+				<!--end::Modal header-->
+				<!--begin::Modal body-->
+				<div class="modal-body scroll-y mx-5 my-7">
+					<!--begin::Form-->
+					<form class="form" asp-action="EditUserPermission" enctype="multipart/form-data" method="post">
+						<input asp-for="UserId" type="hidden" value="@Model.UserId" />
+						<!--begin::Scroll-->
+						<div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_update_role_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_update_role_header" data-kt-scroll-wrappers="#kt_modal_update_role_scroll" data-kt-scroll-offset="300px">
+							<!--begin::Input group-->
+							<div class="fv-row mb-10">
+								<!--begin::Label-->
+								<label class="fs-5 fw-bolder form-label mb-2">
+									<span class="required">Role name</span>
+								</label>
+								<!--end::Label-->
+								<!--begin::Input-->
+								<input disabled class="form-control form-control-solid" placeholder="Enter a role name" value="@Model.CurrentRole.Name" />
+								<!--end::Input-->
+							</div>
+							<!--end::Input group-->
+							<!--begin::Permissions-->
+							<div class="fv-row">
+								<!--begin::Label-->
+								<label class="fs-5 fw-bolder form-label mb-2">User Permissions</label>
+								<!--end::Label-->
+								<!--begin::Table wrapper-->
+								<div class="table-responsive">
+									<!--begin::Table-->
+									<table class="table align-middle table-row-dashed fs-6 gy-5">
+										<!--begin::Table body-->
+										<tbody class="text-gray-600 fw-bold">
+											@{
+												var index = 0;
+											}
+											@foreach (var cif in Model.UserPermission)
+											{
+														
+												<!--begin::Table row-->
+												<tr>
+													<td class="text-gray-800">@cif.Function.Name
+													<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="Allows a full access to the system"></i></td>
+													<td>
+														<!--begin::Wrapper-->
+														<div class="d-flex">
+															@for (int i = 0; i < cif.Permissions.Count; i++)
+															{
+																var p = cif.Permissions[i];
+
+																var checkboxId = "Permission_" + index + "__IsEnable";
+																var factoryId = "Permission_" + index + "__IsFactory";
+																var isFactory = (p.Item3 == "Default" || p.Item3 == "Role") ? true : false;
+
+																<!--begin::Checkbox-->
+																<label class="form-check form-check-custom form-check-solid me-5 me-lg-20">
+																	<input asp-for="Permission[index].FunctionId" type="hidden" value="@p.Item1.FunctionId" />
+																	<input asp-for="Permission[index].CommandId" type="hidden" value="@p.Item1.CommandId" />
+																	<input asp-for="Permission[index].IsFactory" type="hidden" value="@isFactory" />
+																	<input onclick="myCheckboxClick(this.id, '@factoryId')" class="form-check-input" type="checkbox" asp-for="Permission[index].IsEnable" checked="@p.Item2"/>
+																	@if (p.Item2)
+																	{
+																		<div class="form-check-label text-success" >@p.Item1.Description</div>
+																	} else
+																	{
+																		if (isFactory)
+																		{
+																			<div class="form-check-label" >@p.Item1.Description</div>
+																		} else
+																		{
+																			<div class="form-check-label text-danger" >@p.Item1.Description</div>
+																		}
+
+																	}
+
+																</label>
+																<!--end::Checkbox-->
+																index++;
+																if (isFactory)
+																{
+																	<script>
+																		document.getElementById('@checkboxId').indeterminate = true;
+																	</script>
+																}
+																
+															}
+																	
+														</div>
+														<!--end::Wrapper-->
+													</td>
+												</tr>
+											}
+										</tbody>
+										<script>
+											var temp = 0;
+											function myCheckboxClick(id, factoryId) {
+												temp++;
+												var myCheck = document.getElementById(id);
+												var myFactory = document.getElementById(factoryId);
+												if(temp%3 == 0) {
+  													myCheck.indeterminate = true;
+													myFactory.value = "True";
+												} else {
+  													myCheck.indeterminate = false;
+													myFactory.value = "False";
+												}
+											}
+											</script>
+										<!--end::Table body-->
+									</table>
+									<!--end::Table-->
+								</div>
+								<!--end::Table wrapper-->
+							</div>
+							<!--end::Permissions-->
+						</div>
+						<!--end::Scroll-->
+						<!--begin::Actions-->
+						<div class="text-center pt-15">
+							<a asp-controller="User" asp-action="Index" class="btn btn-light me-3" data-kt-roles-modal-action="cancel">Discard</a>
+							<button type="submit" class="btn btn-primary" data-kt-roles-modal-action="submit">
+								<span class="indicator-label">Submit</span>
+								<span class="indicator-progress">Please wait...
+								<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+							</button>
+						</div>
+						<!--end::Actions-->
+					</form>
+					<!--end::Form-->
+				</div>
+				<!--end::Modal body-->
+			</div>
+			<!--end::Modal content-->
+		</div>
+		<!--end::Modal dialog-->
+	</div>
+	<!--end::Container-->
+</div>
+<!--end::Post-->

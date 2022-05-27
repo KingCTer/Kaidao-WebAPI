@@ -113,5 +113,52 @@ namespace Kaidao.Application.AppServices
 
             return list;
         }
+
+        public UserRolePermissionViewModel GetRoleWithPermission(string roleName)
+        {
+            var result = new UserRolePermissionViewModel();
+
+            var functionList = _functionRepository.GetAll().ToList();
+
+            var role = _roleRepository.GetByName(roleName);
+            
+            result.CurrentRole = _mapper.Map<RoleViewModel>(role);
+
+            var listCommandInFunction = new List<CustomUserPermissions>();
+
+            var rolePermissions = _permissionRepository.GetByRoleId(role.Id);
+
+            functionList.ForEach(function =>
+            {
+                var commandInFunctionList = new CustomUserPermissions();
+
+                commandInFunctionList.Function = _mapper.Map<FunctionViewModel>(function);
+
+                var permissions = new List<Tuple<CommandInFunctionViewModel, bool, string>>();
+
+                var commandInFunctions = _commandInFunctionRepository.GetByFunctionId(function.Id).ToList();
+                commandInFunctions.ForEach(cif =>
+                {
+                    var isEnable = rolePermissions.FirstOrDefault(a => a.FunctionId == cif.FunctionId && a.CommandId == cif.CommandId) != null;
+
+                    var asignassignBy = "Default";
+                    if (isEnable)
+                    {
+                        asignassignBy = "Role";
+                    }
+
+                    permissions.Add(new Tuple<CommandInFunctionViewModel, bool, string>(_mapper.Map<CommandInFunctionViewModel>(cif), isEnable, asignassignBy));
+                });
+
+                commandInFunctionList.Permissions = permissions;
+
+                listCommandInFunction.Add(commandInFunctionList);
+            });
+
+            result.UserPermission = listCommandInFunction;
+
+
+            return result;
+        }
     }
 }

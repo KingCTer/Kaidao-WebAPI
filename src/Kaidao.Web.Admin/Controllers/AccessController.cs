@@ -42,7 +42,6 @@ namespace Kaidao.Web.Admin.Controllers
             switch (data.StatusCode)
             {
                 case HttpStatusCode.Unauthorized:
-
                     await HttpContext.SignOutAsync();
                     return Challenge(new AuthenticationProperties
                     {
