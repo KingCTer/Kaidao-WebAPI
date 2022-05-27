@@ -8,6 +8,7 @@
         DELETE,
         APPROVE,
         ACCESS,
-        LIST
+        LIST,
+        CRAWL
     }
 }

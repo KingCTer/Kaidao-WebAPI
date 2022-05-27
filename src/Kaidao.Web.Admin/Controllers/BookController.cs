@@ -121,5 +121,26 @@ namespace Kaidao.Web.Admin.Controllers
             ModelState.AddModelError("", "Cập nhật sản phẩm thất bại");
             return View(request);
         }
+
+        [HttpGet]
+        [ClaimRequirement(FunctionCode.BOOK, CommandCode.CRAWL)]
+        public IActionResult Crawl()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        [ClaimRequirement(FunctionCode.BOOK, CommandCode.CRAWL)]
+        public IActionResult Crawl([FromForm] string url)
+        {
+            if (url == "") return RedirectToAction("Crawl");
+
+            _bookAppService.Crawl(url);
+
+
+            return RedirectToAction("Index");
+
+        }
     }
 }
